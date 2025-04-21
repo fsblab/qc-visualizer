@@ -4,7 +4,7 @@
 </script>
 
 <div class="topbar">
-    <div class="margincontainer">
+    <div class="topbarcontainer">
         <div class="darkmode">
             <Darkmode></Darkmode>
         </div>
@@ -15,21 +15,12 @@
 </div>
 
 <style>
-    .topbar {
-        position: absolute;
-        width: 100%;
-        top: 0em;
-        left: 0em;
-        background-color: rgb(16, 16, 16);
-    }
-
-    .margincontainer {
-        margin: .1em;
+    .topbarcontainer {
+        margin-left: 1em;
         display: flex;
     }
 
     .info {
         margin-left: .2em;
-        display: flex;
     }
 </style>

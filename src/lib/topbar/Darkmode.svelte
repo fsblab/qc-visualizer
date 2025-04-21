@@ -13,6 +13,8 @@
             document.body.classList.add("light");
         }
     }
+
+    toggleColorScheme()
 </script>
 
 <button on:click={() => toggleColorScheme()}>
