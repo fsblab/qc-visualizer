@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const MsCloseSmallRounded: typeof import('~icons/material-symbols/close-small-rounded.svelte')['default']
   const MsDarkMode: typeof import('~icons/material-symbols/dark-mode.svelte')['default']
   const MsFlight: typeof import('~icons/material-symbols/flight.svelte')['default']
   const MsInfoOutline: typeof import('~icons/material-symbols/info-outline.svelte')['default']
