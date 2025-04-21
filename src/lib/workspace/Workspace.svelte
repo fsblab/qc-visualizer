@@ -1,7 +1,7 @@
 <script lang="ts">
     import Tabs from "../Tabs/Tabs.svelte";
 
-    $: projects = [{label: "Project 0", value: 0, component: Tabs}];
+    $: projects = [{label: "Project 0", value: 0, childComponent: Tabs, props: {items: [{label: "Component 0", value: 0}], standardName: "Component"}}];
 </script>
 
 <div>
@@ -11,7 +11,6 @@
 
 <style>
     div {
-        width: 100%;
-        height: 100%;
+        height: 100%
     }
 </style>

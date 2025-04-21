@@ -6,7 +6,7 @@
 
     export let dialog: HTMLDialogElement;
 
-    let items: tab[] = [{label: "About", value: 0, component: About}, {label: "Instructions", value: 1, component: Instructions}];
+    let items: tab[] = [{label: "About", value: 0, childComponent: About}, {label: "Instructions", value: 1, childComponent: Instructions}];
 </script>
 
 <dialog bind:this={dialog}>

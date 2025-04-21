@@ -13,12 +13,9 @@
 </main>
 
 <style>
-    .topbar {
-        background-color: rgb(16, 16, 16);
-    }
-
 	.workspace {
 		margin-left: 1em;
 		margin-right: 1em;
+		height: 100%;
 	}
 </style>

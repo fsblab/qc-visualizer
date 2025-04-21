@@ -3,9 +3,8 @@
     import type { tab } from "../interfaces";
 
     function addItem() {
-        items[items.length - 1] = {label: (standardName || "Component") + " " + String(items.length - 1), value: items.length, class: "", component: comp};
+        items[items.length - 1] = {label: standardName + " " + String(items.length - 1), value: items.length, class: "", childComponent: comp};
         items.push({label: '+', value: 999, class: "add"});
-        activeTab = items.length - 1;
     }
 
     export let items: tab[] = [];
@@ -30,8 +29,8 @@
         {/each}
     </ul>
     <div class="container">
-        {#if items.length > 1}
-            <svelte:component this={items[activeTab].component} />
+        {#if items.length}
+            <svelte:component this={items[activeTab].childComponent} {...items[activeTab].props} />
         {/if}
     </div>
     <slot>
@@ -50,35 +49,12 @@
     button {
         border-radius: 0;
         border: none;
-        width: 100%;
-        border: 1px solid #dee2e6;
-        width: 8em;
+        width: 10em;
     }
-    
-    button:hover {
-        border-color: #646cff;
-        color: #646cff;
-    }
-
-    .active {
-        background-color: #dee2e6;
-        color: black;
-    }
-    
+        
     .add {
-        width: 2em;
         display: flex;
+        width: 2em;
         justify-content: center;
-    }
-
-    div {
-        width: 100%;
-        height: 100%;
-    }
-
-    .container {
-        border: 2px solid #dee2e6;
-        width: 80%;
-        height: 80%;
     }
 </style>
