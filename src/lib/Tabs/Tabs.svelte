@@ -45,21 +45,19 @@
         padding-left: 0;
         margin-bottom: 0;
         list-style: none;
-        border-left: 1px solid #dee2e6;
     }
     
     button {
         border-radius: 0;
         border: none;
         width: 100%;
-        border-top: 1px solid #dee2e6;
-        border-right: 1px solid #dee2e6;
+        border: 1px solid #dee2e6;
         width: 8em;
     }
     
     button:hover {
-        background-color: #42818b;
-        color: black;
+        border-color: #646cff;
+        color: #646cff;
     }
 
     .active {

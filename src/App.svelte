@@ -20,6 +20,5 @@
 	.workspace {
 		margin-left: 1em;
 		margin-right: 1em;
-		width: 100%;
 	}
 </style>

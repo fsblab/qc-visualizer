@@ -15,7 +15,12 @@
 </div>
 
 <style>
+    .topbar {
+        display: flex;
+    }
+
     .topbarcontainer {
+        margin: .4em;
         margin-left: 1em;
         display: flex;
     }
