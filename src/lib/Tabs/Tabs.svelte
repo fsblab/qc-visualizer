@@ -1,40 +1,51 @@
 <script lang="ts">
-    import type { Component } from "svelte";
+    import type { Snippet } from "svelte";
     import type { tab } from "../interfaces";
 
-    function addItem() {
-        items[items.length - 1] = {label: standardName + " " + String(items.length - 1), value: items.length, class: "", childComponent: comp};
-        items.push({label: '+', value: 999, class: "add"});
+    interface propInterface {
+        children?: Snippet,
+        addButtonPressed?: any,
+        items: tab[],
+        activeTab?: number,
+        useAddButton?: boolean,
+        useCloseButton?: boolean
     }
 
-    export let items: tab[] = [];
-    export let activeTab: number = 0;
-    export let standardName: string = "";
-    export let comp: Component | null = null;
-    export let add: boolean = true;
-
-    if (add) {
-        items.push({label: '+', value: 999, class: "add"});
-    }
+    let {
+        children,
+        addButtonPressed,
+        items,
+        activeTab = $bindable(),
+        useAddButton = true,
+        useCloseButton = true
+    }: propInterface = $props();
 </script>
 
 <div>
     <ul>
         {#each items as item}
             <li class={activeTab === item.value ? "active" : item.class}>
-                <button class={activeTab === item.value ? "active" : item.class} on:click={() => item.class === "add" ? addItem() : activeTab = item.value}>
+                <button class={activeTab === item.value ? "active" : item.class} onclick={() => activeTab = item.value}>
                     {item.label}
                 </button>
             </li>
+            {#if useCloseButton}
+                <button class={activeTab === item.value ? "active" : item.class} id="icon">
+                    <MsCloseSmallRounded></MsCloseSmallRounded>
+                </button>
+            {/if}
         {/each}
+        {#if useAddButton}
+            <li>
+                <button class="add" onclick={() => addButtonPressed()}>
+                    +
+                </button>
+            </li>
+        {/if}
     </ul>
     <div class="container">
-        {#if items.length}
-            <svelte:component this={items[activeTab].childComponent} {...items[activeTab].props} />
-        {/if}
+        {@render children?.()}
     </div>
-    <slot>
-    </slot>
 </div>
 
 <style>
@@ -51,10 +62,24 @@
         border: none;
         width: 10em;
     }
+
+    #icon {
+        display: flex;
+        width: 2em;
+        justify-content: center;
+        color: #e13232;
+    }
         
     .add {
         display: flex;
         width: 2em;
         justify-content: center;
+    }
+
+    .container {
+        border-top-right-radius: 8%;
+        border-bottom-right-radius: 8%;
+        border-bottom-left-radius: 8%;
+        height: 100%;
     }
 </style>

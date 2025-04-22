@@ -6,14 +6,18 @@
 
     export let dialog: HTMLDialogElement;
 
-    let items: tab[] = [{label: "About", value: 0, childComponent: About}, {label: "Instructions", value: 1, childComponent: Instructions}];
+    let activeTab = 0;
+    let items: tab[] = [{label: "About", value: 0}, {label: "Instructions", value: 1}];
 </script>
 
 <dialog bind:this={dialog}>
     <button class="closedialog" on:click={() => dialog.close()}>
         <MsCloseSmallRounded></MsCloseSmallRounded>
     </button>
-    <Tabs add={false} {items}>
+    <Tabs useAddButton={false} useCloseButton={false} {items} bind:activeTab={activeTab}>
+        {#snippet children()}
+            <svelte:component this={[About, Instructions][activeTab]}></svelte:component>
+        {/snippet}
     </Tabs>
 </dialog>
 

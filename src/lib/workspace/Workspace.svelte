@@ -1,11 +1,24 @@
 <script lang="ts">
     import Tabs from "../Tabs/Tabs.svelte";
+    import type { tab } from "../interfaces";
+    import { circuitsState } from "../stores/circuits.svelte";
 
-    $: projects = [{label: "Project 0", value: 0, childComponent: Tabs, props: {items: [{label: "Component 0", value: 0}], standardName: "Component"}}];
+    let activeTab: number = 0;
 </script>
 
 <div>
-    <Tabs items={projects} standardName="Project" comp={Tabs}>
+    <Tabs
+        items={circuitsState.circuits}
+        addButtonPressed={() => circuitsState.addCircuit()}
+        bind:activeTab={activeTab}
+    >
+    {#snippet children()}
+        <Tabs
+            items={(circuitsState.circuits[activeTab].components as tab[])}
+            addButtonPressed={() => circuitsState.addComponent(activeTab)}
+        >
+        </Tabs>
+    {/snippet}
     </Tabs>
 </div>
 
