@@ -25,6 +25,10 @@ body {
 	height: 100%;
 }
 
+main {
+	height: 100%;
+}
+
 a {
 	font-weight: 500;
 	text-decoration: inherit;
@@ -74,6 +78,7 @@ body.dark {
 	}
 	.topbar {
         background-color: #101010;
+		border-bottom: 1px solid #2e2e2e;
     }
 	.active {
         background-color: #dee2e6;
@@ -81,6 +86,7 @@ body.dark {
     }
 	.container {
         border: 2px solid #dee2e6;
+		background-color: #2e2e2e;
     }
 	.closebutton {
 		color: #e13232;
@@ -117,6 +123,7 @@ body.light {
 	}
 	.topbar {
         background-color: #f9f9f9;
+		border-bottom: 1px solid #8e8e8e;
     }
 	.active {
         background-color: #1a1a1a;
@@ -124,6 +131,7 @@ body.light {
     }
 	.container {
         border: 2px solid #1e1e1e;
+		background-color: #8e8e8e;
     }
 	.closebutton {
 		color: #e13232;

@@ -83,9 +83,6 @@
     }
 
     .container {
-        border-top-right-radius: 8%;
-        border-bottom-right-radius: 8%;
-        border-bottom-left-radius: 8%;
         height: 100%;
     }
 </style>
