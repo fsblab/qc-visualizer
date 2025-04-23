@@ -21,7 +21,7 @@
     }: propInterface = $props();
 </script>
 
-<div>
+<div class="tabs">
     <ul>
         {#each items as item}
             <li class={activeTab === item.value ? "active" : item.class}>
@@ -30,7 +30,7 @@
                 </button>
             </li>
             {#if useCloseButton}
-                <button class={activeTab === item.value ? "active" : item.class} id="icon">
+                <button class={activeTab === item.value ? "active closebutton" : item.class + " closebutton"}>
                     <MsCloseSmallRounded></MsCloseSmallRounded>
                 </button>
             {/if}
@@ -63,11 +63,17 @@
         width: 10em;
     }
 
-    #icon {
+    .tabs {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        height: 100%;
+    }
+
+    .closebutton {
         display: flex;
         width: 2em;
         justify-content: center;
-        color: #e13232;
     }
         
     .add {

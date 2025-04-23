@@ -6,7 +6,7 @@
     let activeTab: number = 0;
 </script>
 
-<div>
+<div class="workspace">
     <Tabs
         items={circuitsState.circuits}
         addButtonPressed={() => circuitsState.addCircuit()}
@@ -23,7 +23,7 @@
 </div>
 
 <style>
-    div {
+    .workspace {
         height: 100%
     }
 </style>

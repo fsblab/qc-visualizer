@@ -11,12 +11,12 @@
 </script>
 
 <dialog bind:this={dialog}>
-    <button class="closedialog" on:click={() => dialog.close()}>
+    <button class="closebutton" on:click={() => dialog.close()}>
         <MsCloseSmallRounded></MsCloseSmallRounded>
     </button>
     <Tabs useAddButton={false} useCloseButton={false} {items} bind:activeTab={activeTab}>
         {#snippet children()}
-            <svelte:component this={[About, Instructions][activeTab]}></svelte:component>
+        <svelte:component this={[About, Instructions][activeTab]}></svelte:component>
         {/snippet}
     </Tabs>
 </dialog>
@@ -27,7 +27,7 @@
         height: 80%;
     }
 
-    .closedialog {
+    .closebutton {
         position: absolute;
         top: 1em;
         right: 1em;

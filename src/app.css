@@ -82,6 +82,13 @@ body.dark {
 	.container {
         border: 2px solid #dee2e6;
     }
+	.closebutton {
+		color: #e13232;
+	}
+	.closebutton:hover {
+		border-color: #e13232;
+		color: #e13232;
+	}	
 }
 
 body.light {
@@ -118,5 +125,12 @@ body.light {
 	.container {
         border: 2px solid #1e1e1e;
     }
+	.closebutton {
+		color: #e13232;
+	}
+	.closebutton:hover {
+		border-color: #e13232;
+		color: #e13232;
+	}	
 }
 
