@@ -9,7 +9,8 @@
         items: tab[],
         activeTab?: number,
         useAddButton?: boolean,
-        useRemoveButton?: boolean
+        useRemoveButton?: boolean,
+        customClass?: string,
     }
 
     let {
@@ -19,7 +20,8 @@
         items,
         activeTab = $bindable(),
         useAddButton = true,
-        useRemoveButton = true
+        useRemoveButton = true,
+        customClass,
     }: propInterface = $props();
 </script>
 
@@ -45,7 +47,7 @@
             </li>
         {/if}
     </ul>
-    <div class="container">
+    <div class="container {customClass}">
         {@render children?.()}
     </div>
 </div>

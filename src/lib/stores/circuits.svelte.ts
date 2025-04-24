@@ -2,20 +2,32 @@ import type { tab } from "../interfaces";
 
 export const circuitsState = $state({
     circuits: [
-        {label: "Circuit 0", value: 0, componentCounter: 0, components: [{label: "Component 0", value: 0}]},
+        {label: "Circuit 0", value: 0, componentCounter: 0, componentActiveTab: 0, components: [{label: "Component 0", value: 0}]},
     ] as tab[],
     circuitCounter: 0,
 
-    getCircuitIndex(tabValue: number) {
+    getCircuitIndex(tabValue: number): number {
         return this.circuits.findIndex((item) => {return item.value === tabValue});
     },
 
+    getNumberOfCircuits(): number {
+        return this.circuits.length;
+    },
+
+    getNumberOfComponents(val: number) {
+        return this.circuits[this.getCircuitIndex(val)].components?.length;
+    },
+
     addCircuit(): tab {
-        const length = this.circuits.push({label: "Circuit " + String(++this.circuitCounter), value: this.circuitCounter, componentCounter: 0, components: [{label: "Component 0", value: 0}]});
+        const length = this.circuits.push({label: "Circuit " + String(++this.circuitCounter), value: this.circuitCounter, componentCounter: 0, componentActiveTab: 0, components: [{label: "Component 0", value: 0}]});
         return this.circuits[length - 1];
     },
 
     removeCircuit(val: number): tab | null {
+        if (this.getNumberOfCircuits() === 1) {
+            return null
+        }
+
         const index = this.getCircuitIndex(val);
 
         if (index > -1) {
@@ -32,6 +44,10 @@ export const circuitsState = $state({
     },
 
     removeComponent(val: number, compVal: number): tab | null {
+        if (this.getNumberOfComponents(val) === 1) {
+            return null
+        }
+
         const index = this.getCircuitIndex(val);
         const compIndex = this.circuits[index].components!.findIndex((item) => {return item.value === compVal});
         

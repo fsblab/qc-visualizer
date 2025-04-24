@@ -10,7 +10,8 @@ export interface properties {
 export interface tab {
     label: string,
     value: number,
-    componentCounter?: number,
     class?: string,
+    componentCounter?: number,
+    componentActiveTab?: number,
     components?: tab[],
 }

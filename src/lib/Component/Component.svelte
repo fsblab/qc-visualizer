@@ -1,0 +1,52 @@
+<script lang="ts">
+    function moveSvg(event: MouseEvent) {
+        mousePosOnUp = [event.clientX, event.clientY];
+        appliedTranslation = [mousePosOnUp[0] - mousePosOnDown[0], mousePosOnUp[1] - mousePosOnDown[1]];
+        currentTranslation = [currentTranslation[0] + appliedTranslation[0], currentTranslation[1] + appliedTranslation[1]];
+    };
+
+    function getYPos(index: number) {
+        return (fontsize + yOffset) * index + fontsize + yOffset;
+    };
+
+    function getColor(): string {
+        if (document.body.classList.contains("dark")) {
+            return "#f9f9f9";
+        } else {
+            return "red";
+        };
+    }
+
+    export let numberOfQubits: number;
+
+    const psi: string = "\u03C8";
+    const fontsize: number = 20;
+    const yOffset: number = fontsize;
+
+    var mousePosOnDown: number[];
+    var mousePosOnUp: number[];
+    var currentTranslation: number[] = [0, 0];
+    var appliedTranslation: number[] = [0, 0];
+
+    $: currentTranslation;
+</script>
+
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<svg class="svg" on:mousedown={(event: MouseEvent) => {mousePosOnDown = [event.clientX, event.clientY]}} on:mouseup={(event) => {moveSvg(event)}}>
+    <g style="fill: {getColor()}" transform="translate({currentTranslation[0]}, {currentTranslation[1]})">
+        {#each Array.from({length: numberOfQubits}, (_: any, i: number) => i) as index}
+            <text x={fontsize} y={getYPos(index)} font-size={fontsize} font-weight=512>
+                {psi}
+                <tspan font-size={fontsize * .5} dy={fontsize * .5}>{index}</tspan>
+            </text>
+            <line x1={fontsize * 3} y1={getYPos(index)} x2="100%" y2={getYPos(index)} stroke={getColor()} stroke-width="4" />
+        {/each}
+    </g>
+</svg>
+
+<style>
+    .svg {
+        height: 100%;
+        width: 100%;
+    }
+</style>
