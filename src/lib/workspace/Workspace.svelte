@@ -9,7 +9,7 @@
     <Tabs
         items={circuitsState.circuits}
         addButtonPressed={() => circuitsState.addCircuit()}
-        removeButtonPressed={(val: number) => circuitsState.removeCircuit(val)}
+        removeButtonPressed={(val: number) => {circuitsState.removeCircuit(val); if (val === activeTab) activeTab = circuitsState.circuits[0].value}}
         bind:activeTab={activeTab}
     >
     {#snippet children()}
