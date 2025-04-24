@@ -2,16 +2,43 @@ import type { tab } from "../interfaces";
 
 export const circuitsState = $state({
     circuits: [
-        {label: "Circuit 0", value: 0, components: [{label: "Component 0", value: 0}]},
+        {label: "Circuit 0", value: 0, componentCounter: 0, components: [{label: "Component 0", value: 0}]},
     ] as tab[],
+    circuitCounter: 0,
 
-    addCircuit() {
-        this.circuits.push({label: "Circuit " + String(this.circuits.length), value: this.circuits.length, components: [{label: "Component 0", value: 0}]});
-        return this.circuits[this.circuits.length - 1];
+    getCircuitIndex(tabValue: number) {
+        return this.circuits.findIndex((item) => {return item.value === tabValue});
     },
 
-    addComponent(index: number) {
-        (this.circuits[index].components! as tab[]).push({label: "Component " + String(this.circuits[index].components!.length), value: this.circuits[index].components!.length});
-        return this.circuits[index].components!;
-    }
+    addCircuit(): tab {
+        const length = this.circuits.push({label: "Circuit " + String(++this.circuitCounter), value: this.circuitCounter, componentCounter: 0, components: [{label: "Component 0", value: 0}]});
+        return this.circuits[length - 1];
+    },
+
+    removeCircuit(val: number): tab | null {
+        const index = this.getCircuitIndex(val);
+
+        if (index > -1) {
+            return this.circuits.splice(index, 1)[0];
+        } else {
+            return null;
+        }
+    },
+
+    addComponent(val: number): tab {
+        const index = this.getCircuitIndex(val);
+        const length = (this.circuits[index].components! as tab[]).push({label: "Component " + String(++this.circuits[index].componentCounter!), value: this.circuits[index].componentCounter!});
+        return this.circuits[index].components![length - 1];
+    },
+
+    removeComponent(val: number, compVal: number): tab | null {
+        const index = this.getCircuitIndex(val);
+        const compIndex = this.circuits[index].components!.findIndex((item) => {return item.value === compVal});
+        
+        if (index > -1 && compIndex > -1) {
+            return this.circuits[index].components!.splice(compIndex, 1)[0];
+        } else {
+            return null
+        }
+    },
 })

@@ -5,19 +5,21 @@
     interface propInterface {
         children?: Snippet,
         addButtonPressed?: any,
+        removeButtonPressed?: any,
         items: tab[],
         activeTab?: number,
         useAddButton?: boolean,
-        useCloseButton?: boolean
+        useRemoveButton?: boolean
     }
 
     let {
         children,
         addButtonPressed,
+        removeButtonPressed,
         items,
         activeTab = $bindable(),
         useAddButton = true,
-        useCloseButton = true
+        useRemoveButton = true
     }: propInterface = $props();
 </script>
 
@@ -29,8 +31,8 @@
                     {item.label}
                 </button>
             </li>
-            {#if useCloseButton}
-                <button class={activeTab === item.value ? "active closebutton" : item.class + " closebutton"}>
+            {#if useRemoveButton}
+                <button class={activeTab === item.value ? "active closebutton" : item.class + " closebutton"} onclick={() => removeButtonPressed(item.value)}>
                     <MsCloseSmallRounded></MsCloseSmallRounded>
                 </button>
             {/if}

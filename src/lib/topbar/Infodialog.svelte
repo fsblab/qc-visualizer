@@ -14,7 +14,7 @@
     <button class="closebutton" on:click={() => dialog.close()}>
         <MsCloseSmallRounded></MsCloseSmallRounded>
     </button>
-    <Tabs useAddButton={false} useCloseButton={false} {items} bind:activeTab={activeTab}>
+    <Tabs useAddButton={false} useRemoveButton={false} {items} bind:activeTab={activeTab}>
         {#snippet children()}
         <svelte:component this={[About, Instructions][activeTab]}></svelte:component>
         {/snippet}
