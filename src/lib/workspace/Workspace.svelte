@@ -4,11 +4,11 @@
     import { circuitsState } from "../stores/circuits.svelte";
 
     function validateNumberOfQubits() {
-        if (typeof numberOfQubits != typeof 0) {
+        if (isNaN(Number(numberOfQubits))) {
             numberOfQubits = 1;
         }
 
-        numberOfQubits = Math.min(Number(numberOfQubits), 1);
+        numberOfQubits = Math.max(numberOfQubits, 1);
     }
 
     $: circuitName = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label;
