@@ -17,7 +17,9 @@
         };
     }
 
-    export let numberOfQubits: number;
+    export var numberOfQubits: number;
+    export var currentTranslation: number[];
+
 
     const psi: string = "\u03C8";
     const fontsize: number = 20;
@@ -25,7 +27,6 @@
 
     var mousePosOnDown: number[];
     var mousePosOnUp: number[];
-    var currentTranslation: number[] = [0, 0];
     var appliedTranslation: number[] = [0, 0];
 
     $: currentTranslation;

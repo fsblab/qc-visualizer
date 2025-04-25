@@ -108,6 +108,11 @@ body.dark {
 		border-color: #e13232;
 		color: #e13232;
 	}
+	.childOptions {
+		border-top: 1px solid #dee2e6;
+		border-left: 1px solid #dee2e6;
+		border-right: 1px solid #dee2e6;
+	}
 }
 
 body.light {
@@ -152,6 +157,11 @@ body.light {
 	.closebutton:hover {
 		border-color: #e13232;
 		color: #e13232;
-	}	
+	}
+	.childOptions {
+		border-top: 1px solid #1e1e1e;
+		border-left: 1px solid #1e1e1e;
+		border-right: 1px solid #1e1e1e;
+	}
 }
 
