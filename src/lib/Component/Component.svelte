@@ -13,7 +13,7 @@
         if (document.body.classList.contains("dark")) {
             return "#f9f9f9";
         } else {
-            return "red";
+            return "#1e1e1e";
         };
     }
 
@@ -37,11 +37,11 @@
 <svg class="svg" on:mousedown={(event: MouseEvent) => {mousePosOnDown = [event.clientX, event.clientY]}} on:mouseup={(event) => {moveSvg(event)}}>
     <g style="fill: {getColor()}" transform="translate({currentTranslation[0]}, {currentTranslation[1]})">
         {#each Array.from({length: numberOfQubits}, (_: any, i: number) => i) as index}
-            <text x={fontsize} y={getYPos(index)} font-size={fontsize} font-weight=512>
+            <text style="fill: {getColor()}" x={fontsize} y={getYPos(index)} font-size={fontsize} font-weight=512>
                 {psi}
                 <tspan font-size={fontsize * .5} dx={-fontsize * .2} dy={fontsize * .5}>{index}</tspan>
             </text>
-            <line x1={fontsize * 3} y1={getYPos(index)} x2="100%" y2={getYPos(index)} stroke={getColor()} stroke-width="4" />
+            <line x1={fontsize * 3} y1={getYPos(index)} x2="100%" y2={getYPos(index)} stroke={getColor()} stroke-width={4 * scale} />
         {/each}
     </g>
 </svg>

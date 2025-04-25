@@ -127,8 +127,9 @@
     }
     #translationx,
     #translationy {
-        width: 4em;
+        width: 2em;
         margin-right: 1px;
+        text-align: center;
     }
     .resetPosition {
         display: flex;
@@ -139,7 +140,7 @@
     }
     .dec,
     .inc {
-        width: 2em;
+        width: 1.6em;
         height: 1.3em;
         text-align: center;
         padding: 0; 
@@ -156,6 +157,7 @@
     }
     .scale,
     .numberOfQubits {
+        text-align: center;
         width: 1em;
     }
 </style>
