@@ -16,8 +16,7 @@
     $: circuitName = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label;
     $: componentName = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)].label;
     $: componentProps = circuitsState.getComponentProperties(activeTab);
-
-    var activeTab: number = 0;
+    $: activeTab = 0;
 </script>
 
 <div class="workspace">
@@ -34,28 +33,33 @@
                         <label for="circuitName">
                             Circuit Name:
                         </label>
-                        <input
-                            type="text"
-                            id="circuitName"
-                            value={circuitName}
-                            on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label = event.target?.value}}
-                        />
-                    </div><div class="childOptions">
+                        <div class="childOptionsOptions">
+                            <input
+                                type="text"
+                                id="circuitName"
+                                value={circuitName}
+                                on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label = event.target?.value}}
+                            />
+                        </div>
+                    </div>
+                    <div class="childOptions">
                         <label for="componentName">
                             Component Name:
                         </label>
-                        <input
-                            type="text"
-                            id="componentName"
-                            value={componentName}
-                            on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)].label = event.target?.value}}
-                        />
+                        <div class="childOptionsOptions">
+                            <input
+                                type="text"
+                                id="componentName"
+                                value={componentName}
+                                on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)].label = event.target?.value}}
+                            />
+                        </div>
                     </div>
                     <div class="childOptions">
                         <label for="numberOfQubits">
                             #Qubits:
                         </label>
-                        <div class="options">
+                        <div class="childOptionsOptions">
                             <button class="dec" on:click={() => {componentProps.numberOfQubits--}} disabled={componentProps.numberOfQubits === 1}>
                                 <MsArrowLeft></MsArrowLeft>
                             </button>
@@ -73,7 +77,7 @@
                     </div>
                     <div class="childOptions">
                         <label for="translationx">Current Translation:</label>
-                        <div class="options">
+                        <div class="childOptionsOptions">
                             <input
                                 type="text"
                                 id="translationx"
@@ -95,7 +99,7 @@
                         <label for="scale">
                             Scale:
                         </label>
-                        <div class="options">
+                        <div class="childOptionsOptions">
                             <button class="dec" on:click={() => {componentProps.scale--}} disabled={componentProps.scale === 0}>
                                 <MsArrowLeft></MsArrowLeft>
                             </button>
@@ -149,26 +153,25 @@
     .resetPosition {
         display: flex;
         width: 4em;
-        height: 1.3em;
         padding: 0;
         justify-content: center;
     }
     .dec,
     .inc {
-        width: 1.6em;
-        height: 1.3em;
         text-align: center;
         padding: 0; 
     }
     .options {
         display: flex;
-        height: 3em;
         margin: 2px;
     }
     .childOptions {
         display: flex;
         flex-direction: column;
         margin: 2px;
+    }
+    .childOptionsOptions {
+        display: flex;
     }
     .scale,
     .numberOfQubits {
