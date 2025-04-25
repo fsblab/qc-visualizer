@@ -1,10 +1,7 @@
-import type { Component } from "svelte";
-
-export interface properties {
-    items?: tab[]
-    activeTab?: number
-    comp?: Component[] | null
-    add?: boolean
+export interface componentProperties {
+    numberOfQubits: number,
+    currentTranslation: number[],
+    scale: number,
 }
 
 export interface tab {
@@ -14,4 +11,5 @@ export interface tab {
     componentCounter?: number,
     componentActiveTab?: number,
     components?: tab[],
+    componentProperties?: componentProperties
 }

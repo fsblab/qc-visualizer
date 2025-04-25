@@ -1,4 +1,7 @@
 <script lang="ts">
+    import type { componentProperties } from "../interfaces";
+    import { designStore } from "../stores/design";
+
     function moveSvg(event: MouseEvent) {
         mousePosOnUp = [event.clientX, event.clientY];
         appliedTranslation = [mousePosOnUp[0] - mousePosOnDown[0], mousePosOnUp[1] - mousePosOnDown[1]];
@@ -10,31 +13,31 @@
     };
 
     function getColor(): string {
-        if (document.body.classList.contains("dark")) {
+        if ($designStore.darkmode) {
             return "#f9f9f9";
         } else {
             return "#1e1e1e";
         };
     }
 
-    export var numberOfQubits: number;
-    export var currentTranslation: number[];
-    export var scale: number;
+    var {
+        numberOfQubits = $bindable(),
+        currentTranslation = $bindable(),
+        scale = $bindable(),
+    }: componentProperties = $props();
 
 
     const psi: string = "\u03C8";
-    var fontsize: number = 20 * scale;
-    const yOffset: number = fontsize;
+    var fontsize: number = $derived(20 * scale);
+    const yOffset: number = $derived(fontsize);
 
     var mousePosOnDown: number[];
     var mousePosOnUp: number[];
     var appliedTranslation: number[] = [0, 0];
-
-    $: fontsize = 20 * scale;
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<svg class="svg" on:mousedown={(event: MouseEvent) => {mousePosOnDown = [event.clientX, event.clientY]}} on:mouseup={(event) => {moveSvg(event)}}>
+<svg class="svg" onmousedown={(event: MouseEvent) => {mousePosOnDown = [event.clientX, event.clientY]}} onmouseup={(event) => {moveSvg(event)}}>
     <g style="fill: {getColor()}" transform="translate({currentTranslation[0]}, {currentTranslation[1]})">
         {#each Array.from({length: numberOfQubits}, (_: any, i: number) => i) as index}
             <text style="fill: {getColor()}" x={fontsize} y={getYPos(index)} font-size={fontsize} font-weight=512>

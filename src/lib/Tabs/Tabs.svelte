@@ -13,7 +13,7 @@
         customClass?: string,
     }
 
-    let {
+    var {
         children,
         addButtonPressed,
         removeButtonPressed,
