@@ -14,6 +14,7 @@
     }
 
     $: circuitName = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label;
+    $: componentName = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)].label;
     $: componentProps = circuitsState.getComponentProperties(activeTab);
 
     var activeTab: number = 0;
@@ -30,14 +31,24 @@
             <div class="children">
                 <div class="options">
                     <div class="childOptions">
+                        <label for="circuitName">
+                            Circuit Name:
+                        </label>
+                        <input
+                            type="text"
+                            id="circuitName"
+                            value={circuitName}
+                            on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label = event.target?.value}}
+                        />
+                    </div><div class="childOptions">
                         <label for="componentName">
-                            Name:
+                            Component Name:
                         </label>
                         <input
                             type="text"
                             id="componentName"
-                            value={circuitName}
-                            on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label = event.target?.value}}
+                            value={componentName}
+                            on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)].label = event.target?.value}}
                         />
                     </div>
                     <div class="childOptions">
@@ -100,7 +111,6 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
                 <Tabs
                     items={(circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components!)}

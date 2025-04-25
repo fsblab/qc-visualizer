@@ -2,7 +2,7 @@
     import type { Snippet } from "svelte";
     import type { tab } from "../interfaces";
 
-    interface propInterface {
+    interface tabPropertiesInterface {
         children?: Snippet,
         addButtonPressed?: any,
         removeButtonPressed?: any,
@@ -22,7 +22,7 @@
         useAddButton = true,
         useRemoveButton = true,
         customClass,
-    }: propInterface = $props();
+    }: tabPropertiesInterface = $props();
 </script>
 
 <div class="tabs">
