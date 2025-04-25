@@ -18,6 +18,7 @@
     var activeTab: number = 0;
     var numberOfQubits = 4;
     var currentTranslation = [0, 0]
+    var scale = 1;
 </script>
 
 <div class="workspace">
@@ -34,7 +35,12 @@
                         <label for="componentName">
                             Name:
                         </label>
-                        <input type="text" id="componentName" value={circuitName} on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label = event.target?.value}} />
+                        <input
+                            type="text"
+                            id="componentName"
+                            value={circuitName}
+                            on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label = event.target?.value}}
+                        />
                     </div>
                     <div class="childOptions">
                         <label for="numberOfQubits">
@@ -44,7 +50,12 @@
                             <button class="dec" on:click={() => {numberOfQubits--}} disabled={numberOfQubits === 1}>
                                 <MsArrowLeft></MsArrowLeft>
                             </button>
-                            <input type="text" class="numberOfQubits" id="numberOfQubits" value={numberOfQubits} on:change={(event: Event) => {numberOfQubits = event.target?.value; numberOfQubits = validateNumber(numberOfQubits)}} />
+                            <input
+                                type="text"
+                                class="numberOfQubits"
+                                id="numberOfQubits"
+                                value={numberOfQubits} on:change={(event: Event) => {numberOfQubits = event.target?.value; numberOfQubits = validateNumber(numberOfQubits)}}
+                            />
                             <button class="inc" on:click={() => {numberOfQubits++}}>
                                 <MsArrowRight></MsArrowRight>
                             </button>
@@ -53,13 +64,43 @@
                     <div class="childOptions">
                         <label for="translationx">Current Translation:</label>
                         <div class="options">
-                            <input type="text" id="translationx" value={currentTranslation[0]} on:change={(event: Event) => {currentTranslation[0] = event.target?.value; currentTranslation[0] = isNaN(Number(currentTranslation[0])) ? 0 : currentTranslation[0]}} />
-                            <input type="text" id="translationy" value={currentTranslation[1]} on:change={(event: Event) => {currentTranslation[1] = event.target?.value; currentTranslation[1] = isNaN(Number(currentTranslation[1])) ? 0 : currentTranslation[1]}} />
+                            <input
+                                type="text"
+                                id="translationx"
+                                value={currentTranslation[0]}
+                                on:change={(event: Event) => {currentTranslation[0] = event.target?.value; currentTranslation[0] = isNaN(Number(currentTranslation[0])) ? 0 : currentTranslation[0]}}
+                            />
+                            <input
+                                type="text"
+                                id="translationy"
+                                value={currentTranslation[1]}
+                                on:change={(event: Event) => {currentTranslation[1] = event.target?.value; currentTranslation[1] = isNaN(Number(currentTranslation[1])) ? 0 : currentTranslation[1]}}
+                            />
                             <button class="resetPosition" on:click={() => {currentTranslation = [0, 0]}}>
                                 Reset
                             </button>
                         </div>
                     </div>
+                    <div class="childOptions">
+                        <label for="scale">
+                            Scale:
+                        </label>
+                        <div class="options">
+                            <button class="dec" on:click={() => {scale--}} disabled={scale === 0}>
+                                <MsArrowLeft></MsArrowLeft>
+                            </button>
+                            <input
+                                type="text"
+                                class="scale"
+                                id="scale"
+                                value={scale} on:change={(event: Event) => {scale = event.target?.value; scale = isNaN(Number(scale)) ? 1 : scale}}
+                            />
+                            <button class="inc" on:click={() => {scale++}}>
+                                <MsArrowRight></MsArrowRight>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
                 <Tabs
                     items={(circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components!)}
@@ -69,7 +110,7 @@
                     customClass="noBottomBorder noLeftBorder noRightBorder"
                 >
                     {#snippet children()}
-                        <Component {numberOfQubits} bind:currentTranslation={currentTranslation}/>
+                        <Component {numberOfQubits} {scale} bind:currentTranslation={currentTranslation}/>
                     {/snippet}
                 </Tabs>
             </div>
@@ -113,6 +154,7 @@
         flex-direction: column;
         margin: 2px;
     }
+    .scale,
     .numberOfQubits {
         width: 1em;
     }

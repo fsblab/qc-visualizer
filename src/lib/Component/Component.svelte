@@ -19,17 +19,18 @@
 
     export var numberOfQubits: number;
     export var currentTranslation: number[];
+    export var scale: number;
 
 
     const psi: string = "\u03C8";
-    const fontsize: number = 20;
+    var fontsize: number = 20 * scale;
     const yOffset: number = fontsize;
 
     var mousePosOnDown: number[];
     var mousePosOnUp: number[];
     var appliedTranslation: number[] = [0, 0];
 
-    $: currentTranslation;
+    $: fontsize = 20 * scale;
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -38,7 +39,7 @@
         {#each Array.from({length: numberOfQubits}, (_: any, i: number) => i) as index}
             <text x={fontsize} y={getYPos(index)} font-size={fontsize} font-weight=512>
                 {psi}
-                <tspan font-size={fontsize * .5} dy={fontsize * .5}>{index}</tspan>
+                <tspan font-size={fontsize * .5} dx={-fontsize * .2} dy={fontsize * .5}>{index}</tspan>
             </text>
             <line x1={fontsize * 3} y1={getYPos(index)} x2="100%" y2={getYPos(index)} stroke={getColor()} stroke-width="4" />
         {/each}

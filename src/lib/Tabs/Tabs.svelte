@@ -35,7 +35,7 @@
             </li>
             {#if useRemoveButton}
                 <button class={activeTab === item.value ? "active closebutton" : item.class + " closebutton"} onclick={() => removeButtonPressed(item.value)}>
-                    <MsCloseSmallRounded></MsCloseSmallRounded>
+                    x
                 </button>
             {/if}
         {/each}
