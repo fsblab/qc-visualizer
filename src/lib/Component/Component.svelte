@@ -9,6 +9,7 @@
         if (mousePosOnUp[0] != mousePosOnDown[0] || mousePosOnUp[1] != mousePosOnDown[1]) {
             moveSvg();
         } else {
+            mousePosOnUp = [event.offsetX - currentTranslation[0], event.offsetY - currentTranslation[1]];
             setGate();
         }
     };
@@ -52,7 +53,7 @@
         correctedPos[0] -= (fontsize + yOffset) / 2;
         positionName = indexVal + "." + positionName;
 
-        component!.gates[positionName] = {gate: component!.selectedGate, position: correctedPos};
+        component!.gates[positionName] = {gate: component!.selectedGate.gate!, position: correctedPos};
     };
 
     function getYPos(index: number) {

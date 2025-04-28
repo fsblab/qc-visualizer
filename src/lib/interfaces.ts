@@ -19,7 +19,7 @@ export interface tab {
 export interface circuit {
     label: string,
     value: number,
-    selectedGate: Component<gateProperties> | null,
+    selectedGate: gateMetadata | null,
     componentProperties: componentProperties | null,
     gates: {[key: string]: gate},
 }
@@ -44,4 +44,12 @@ export interface tabProperties {
 export interface gate {
     gate: Component<gateProperties>,
     position: number[],
+}
+
+export interface gateMetadata {
+    gate: Component<gateProperties> | null,
+    name: string,
+    symbol: string,
+    size: number,
+    matrix: {},
 }
