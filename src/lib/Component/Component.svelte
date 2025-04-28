@@ -52,8 +52,6 @@
         correctedPos[0] -= (fontsize + yOffset) / 2;
         positionName = indexVal + "." + positionName;
 
-        console.log(positionName, " ", correctedPos)
-
         component!.gates[positionName] = {gate: component!.selectedGate, position: correctedPos};
     };
 
@@ -98,19 +96,9 @@
             </text>
             <line x1={fontsize * 3} y1={getYPos(index)} x2="100%" y2={getYPos(index)} stroke={getColor()} stroke-width={4 * scale} />
         {/each}
-<!--         <Hgate
-            position={[100, 20]}
-            scale={scale}
-            fontsize={fontsize}
-        ></Hgate>
-        <Hgate
-            position={[100, 60]}
-            scale={scale}
-            fontsize={fontsize}
-        ></Hgate>
- -->        {#each Object.entries(component!.gates) as [_, gate]}
-            {@const Test = gate.gate}
-            <Test position={gate.position} scale={scale} fontsize={fontsize}></Test>
+        {#each Object.entries(component!.gates) as [_, gate]}
+            {@const Gate = gate.gate}
+            <Gate position={gate.position} scale={scale} fontsize={fontsize}></Gate>
         {/each}
     </g>
 </svg>
