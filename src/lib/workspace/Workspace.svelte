@@ -1,5 +1,6 @@
 <script lang="ts">
     import Component from "../Component/Component.svelte";
+    import { gates } from "../Gates/gates";
     import Tabs from "../Tabs/Tabs.svelte";
     import { circuitsState } from "../stores/circuits.svelte";
 
@@ -11,10 +12,18 @@
         val = Math.max(val, 1);
 
         return val;
-    }
+    };
 
-    $: circuitName = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label;
-    $: componentName = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)].label;
+    addEventListener("keydown", (event: KeyboardEvent) => {
+        if (event.key == "Escape") {
+            component.selectedGate = gates["None"];
+        } else if (Object.hasOwn(gates, event.key.toLocaleUpperCase())) {
+            component.selectedGate = gates[event.key.toLocaleUpperCase()];
+        }
+    });
+
+    $: circuit = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)];
+    $: component = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)];
     $: componentProps = circuitsState.getComponentProperties(activeTab);
     $: activeTab = 0;
 </script>
@@ -37,8 +46,8 @@
                             <input
                                 type="text"
                                 id="circuitName"
-                                value={circuitName}
-                                on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label = event.target?.value}}
+                                value={circuit.label}
+                                onchange={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].label = event.target?.value}}
                             />
                         </div>
                     </div>
@@ -50,8 +59,8 @@
                             <input
                                 type="text"
                                 id="componentName"
-                                value={componentName}
-                                on:change={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)].label = event.target?.value}}
+                                value={component.label}
+                                onchange={(event: Event) => {circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)].label = event.target?.value}}
                             />
                         </div>
                     </div>
@@ -60,7 +69,7 @@
                             #Qubits:
                         </label>
                         <div class="childOptionsOptions">
-                            <button class="dec" on:click={() => {componentProps.numberOfQubits--}} disabled={componentProps.numberOfQubits === 1}>
+                            <button class="dec" onclick={() => {componentProps.numberOfQubits--}} disabled={componentProps.numberOfQubits === 1}>
                                 <MsArrowLeft></MsArrowLeft>
                             </button>
                             <input
@@ -68,9 +77,9 @@
                                 class="numberOfQubits"
                                 id="numberOfQubits"
                                 value={componentProps.numberOfQubits}
-                                on:change={(event: Event) => {componentProps.numberOfQubits = event.target?.value; componentProps.numberOfQubits = validateNumber(componentProps.numberOfQubits)}}
+                                onchange={(event: Event) => {componentProps.numberOfQubits = event.target?.value; componentProps.numberOfQubits = validateNumber(componentProps.numberOfQubits)}}
                             />
-                            <button class="inc" on:click={() => {componentProps.numberOfQubits++}}>
+                            <button class="inc" onclick={() => {componentProps.numberOfQubits++}}>
                                 <MsArrowRight></MsArrowRight>
                             </button>
                         </div>
@@ -82,15 +91,15 @@
                                 type="text"
                                 id="translationx"
                                 value={componentProps.currentTranslation[0]}
-                                on:change={(event: Event) => {componentProps.currentTranslation[0] = event.target?.value; componentProps.currentTranslation[0] = isNaN(Number(componentProps.currentTranslation[0])) ? 0 : componentProps.currentTranslation[0]}}
+                                onchange={(event: Event) => {componentProps.currentTranslation[0] = event.target?.value; componentProps.currentTranslation[0] = isNaN(Number(componentProps.currentTranslation[0])) ? 0 : componentProps.currentTranslation[0]}}
                             />
                             <input
                                 type="text"
                                 id="translationy"
                                 value={componentProps.currentTranslation[1]}
-                                on:change={(event: Event) => {componentProps.currentTranslation[1] = event.target?.value; componentProps.currentTranslation[1] = isNaN(Number(componentProps.currentTranslation[1])) ? 0 : componentProps.currentTranslation[1]}}
+                                onchange={(event: Event) => {componentProps.currentTranslation[1] = event.target?.value; componentProps.currentTranslation[1] = isNaN(Number(componentProps.currentTranslation[1])) ? 0 : componentProps.currentTranslation[1]}}
                             />
-                            <button class="resetPosition" on:click={() => {componentProps.currentTranslation = [0, 0]}}>
+                            <button class="resetPosition" onclick={() => {componentProps.currentTranslation = [0, 0]}}>
                                 Reset
                             </button>
                         </div>
@@ -100,7 +109,7 @@
                             Scale:
                         </label>
                         <div class="childOptionsOptions">
-                            <button class="dec" on:click={() => {componentProps.scale--}} disabled={componentProps.scale === 0}>
+                            <button class="dec" onclick={() => {componentProps.scale--}} disabled={componentProps.scale === 0}>
                                 <MsArrowLeft></MsArrowLeft>
                             </button>
                             <input
@@ -108,11 +117,23 @@
                                 class="scale"
                                 id="scale"
                                 value={componentProps.scale}
-                                on:change={(event: Event) => {componentProps.scale = event.target?.value; componentProps.scale = isNaN(Number(componentProps.scale)) ? 1 : componentProps.scale}}
+                                onchange={(event: Event) => {componentProps.scale = event.target?.value; componentProps.scale = isNaN(Number(componentProps.scale)) ? 1 : componentProps.scale}}
                             />
-                            <button class="inc" on:click={() => {componentProps.scale++}}>
+                            <button class="inc" onclick={() => {componentProps.scale++}}>
                                 <MsArrowRight></MsArrowRight>
                             </button>
+                        </div>
+                    </div>
+                    <div class="childOptions">
+                        <label for="gateSelect">
+                            Gate:
+                        </label>
+                        <div class="childOptionsOptions">
+                            <select bind:value={component.selectedGate} id="gateSelect">
+                                {#each Object.entries(gates) as [text, gate]}
+                                    <option class="firstLetterMarked" value={gate}>{text}</option>
+                                {/each}
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -124,10 +145,11 @@
                     customClass="noBottomBorder noLeftBorder noRightBorder"
                 >
                     {#snippet children()}
-                        <Component 
+                        <Component
                             bind:numberOfQubits={componentProps.numberOfQubits}
                             bind:currentTranslation={componentProps.currentTranslation}
                             bind:scale={componentProps.scale}
+                            bind:component={component}
                         >
                         </Component>
                     {/snippet}
@@ -142,13 +164,18 @@
         height: 100%
     }
     .children {
-        height: 90%;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
     #translationx,
     #translationy {
         width: 2em;
         margin-right: 1px;
         text-align: center;
+    }
+    #gateSelect {
+        width: 100%;
     }
     .resetPosition {
         display: flex;
@@ -177,5 +204,8 @@
     .numberOfQubits {
         text-align: center;
         width: 1em;
+    }
+    .firstLetterMarked {
+        text-decoration: line-through;
     }
 </style>

@@ -1,17 +1,5 @@
 <script lang="ts">
-    import type { Snippet } from "svelte";
-    import type { tab } from "../interfaces";
-
-    interface tabPropertiesInterface {
-        children?: Snippet,
-        addButtonPressed?: any,
-        removeButtonPressed?: any,
-        items: tab[],
-        activeTab?: number,
-        useAddButton?: boolean,
-        useRemoveButton?: boolean,
-        customClass?: string,
-    }
+    import type { tabProperties } from "../interfaces";
 
     var {
         children,
@@ -22,7 +10,7 @@
         useAddButton = true,
         useRemoveButton = true,
         customClass,
-    }: tabPropertiesInterface = $props();
+    }: tabProperties = $props();
 </script>
 
 <div class="tabs">
@@ -34,7 +22,7 @@
                 </button>
             </li>
             {#if useRemoveButton}
-                <button class={activeTab === item.value ? "active closebutton" : item.class + " closebutton"} onclick={() => removeButtonPressed(item.value)}>
+                <button class="{activeTab === item.value ? "active" : item.class} closebutton" onclick={() => removeButtonPressed(item.value)}>
                     x
                 </button>
             {/if}
@@ -59,6 +47,7 @@
         padding-left: 0;
         margin-bottom: 0;
         list-style: none;
+        text-wrap: nowrap;
     }
     
     button {

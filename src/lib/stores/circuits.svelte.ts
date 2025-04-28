@@ -1,4 +1,5 @@
-import type { componentProperties, tab } from "../interfaces";
+import { gates } from "../Gates/gates";
+import type { circuit, componentProperties, tab } from "../interfaces";
 
 const baseComponentProperties: componentProperties = {
     numberOfQubits: 4,
@@ -6,17 +7,23 @@ const baseComponentProperties: componentProperties = {
     scale: 1,
 };
 
-const baseCircuitProperties: tab = {
+
+const baseComponent: circuit = {
+    label: "Component 0",
+    value: 0,
+    selectedGate: gates["None"],
+    componentProperties: baseComponentProperties,
+    gates: {},
+};
+
+
+const baseCircuit: tab = {
     label: "Circuit 0",
     value: 0,
     componentCounter: 0,
     componentActiveTab: 0,
     components: [
-        {
-            label: "Component 0",
-            value: 0,
-            componentProperties: baseComponentProperties,
-        },
+        baseComponent,
     ],
 };
 
@@ -27,26 +34,24 @@ function setCircuitProperties(val: number): tab {
         componentCounter: 0,
         componentActiveTab: 0,
         components: [
-            {
-                label: "Component 0",
-                value: 0,
-                componentProperties: baseComponentProperties,
-            },
+           baseComponent,
         ],
     };
 }
 
-function setComponentProperties(val: number): tab {
+function setComponentProperties(val: number): circuit {
     return {
         label: "Component " + String(val),
         value: val,
+        selectedGate: gates["None"],
         componentProperties: baseComponentProperties,
+        gates: {},
     };
 }
 
 export const circuitsState = $state({
     circuits: [
-        baseCircuitProperties,
+        baseCircuit,
     ] as tab[],
 
     circuitCounter: 0,
@@ -65,7 +70,7 @@ export const circuitsState = $state({
     getComponentProperties(tabValue: number): componentProperties {
         const index: number = this.getCircuitIndex(tabValue);
         const compIndex: number = this.getActiveComponentIndex(tabValue);
-        const comp: tab[] = (this.circuits[index].components!);
+        const comp: circuit[] = (this.circuits[index].components!);
         
         return (comp[compIndex].componentProperties!);
     },
