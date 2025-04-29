@@ -12,6 +12,14 @@
         return val;
     };
 
+    function mouseWheelUsed(direction: number, property: number) {
+        if (direction > 0) {
+            return property + 1;
+        } else {
+            return property - 1;
+        }
+    }
+
     var {activeTab = $bindable()} = $props();
 
     var circuit = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)];
@@ -60,6 +68,7 @@
                 id="numberOfQubits"
                 value={componentProps.numberOfQubits}
                 onchange={(event: Event) => {componentProps.numberOfQubits = event.target?.value; componentProps.numberOfQubits = validateNumber(componentProps.numberOfQubits)}}
+                onwheel={(event: Event) => {componentProps.numberOfQubits = mouseWheelUsed(event.wheelDelta, componentProps.numberOfQubits)}}
             />
             <button class="inc" onclick={() => {componentProps.numberOfQubits++}}>
                 <MsArrowRight></MsArrowRight>
@@ -100,6 +109,7 @@
                 id="scale"
                 value={componentProps.scale}
                 onchange={(event: Event) => {componentProps.scale = event.target?.value; componentProps.scale = isNaN(Number(componentProps.scale)) ? 1 : componentProps.scale}}
+                onwheel={(event: Event) => {componentProps.scale = mouseWheelUsed(event.wheelDelta, componentProps.scale)}}
             />
             <button class="inc" onclick={() => {componentProps.scale++}}>
                 <MsArrowRight></MsArrowRight>

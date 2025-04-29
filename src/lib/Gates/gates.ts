@@ -1,3 +1,5 @@
+import { math } from "../util/math"
+import type { Complex } from "mathjs";
 import type { gateMetadata } from "../interfaces";
 import Hgate from "./Hgate.svelte";
 
@@ -10,8 +12,9 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "H",
         size: 1,
         matrix: {
-            scalar: "1/sqrt(2)",
-            matrix: [[1, 1], [1, -1]],
+            scalarString: "1/sqrt(2)",
+            scalar: (delta: Complex) =>  1 / (math.sqrt(2) as number),
+            matrix: math.matrix([[1, 1], [1, -1]]),
         },
     },
     "I": {
@@ -20,18 +23,20 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "I",
         size: 1,
         matrix: {
-            scalar: "",
-            matrix: [[1, 0], [0, 1]],
+            scalarString: "",
+            scalar: (delta: Complex) => 1,
+            matrix: math.matrix([[1, 0], [0, 1]]),
         },
     },
-    "Ph": {
+    "P": {
         gate: null,
         name: "Global Phase",
         symbol: "Ph",
         size: 1,
         matrix: {
-            scalar: "e^{i delta}",
-            matrix: [[1, 0], [0, 1]],
+            scalarString: "e^{i delta}",
+            scalar: (delta: Complex) => math.exp(math.multiply(math.complex("i"), delta) as Complex),
+            matrix: math.matrix([[1, 0], [0, 1]]),
         },
     },
     "X": {
@@ -40,8 +45,9 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "X",
         size: 1,
         matrix: {
-            scalar: "",
-            matrix: [[0, 1], [1, 0]],
+            scalarString: "",
+            scalar: (delta: Complex) => 1,
+            matrix: math.matrix([[0, 1], [1, 0]]),
         },
     },
     "Y": {
@@ -50,8 +56,9 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "Y",
         size: 1,
         matrix: {
-            scalar: "",
-            matrix: [[0, "-i"], ["i", 0]],
+            scalarString: "",
+            scalar: (delta: Complex) => 1,
+            matrix: math.matrix([[0, math.complex("-i")], [math.complex("i"), 0]]),
         },
     },
     "Z": {
@@ -60,8 +67,9 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "Z",
         size: 1,
         matrix: {
-            scalar: "",
-            matrix: [[1, 0], [0, -1]],
+            scalarString: "",
+            scalar: (delta: Complex) => 1,
+            matrix: math.matrix([[1, 0], [0, -1]]),
         },
     },
     "S": {
@@ -70,8 +78,9 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "S",
         size: 1,
         matrix: {
-            scalar: "",
-            matrix: [[1, 0], [0, "i"]],
+            scalarString: "",
+            scalar: (delta: Complex) => 1,
+            matrix: math.matrix([[1, 0], [0, math.complex("i")]]),
         },
     },
 };
