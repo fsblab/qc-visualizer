@@ -1,5 +1,6 @@
 <script lang="ts">
     import { gates } from "../../Gates/gates";
+    import Matrix from "../../Matrix/Matrix.svelte";
 </script>
 
 <table>
@@ -9,7 +10,7 @@
             <td>Symbol</td>
             <td>Size</td>
             <td>Matrix</td>
-            <td class="gate">Gate</td>
+            <td>Gate</td>
         </tr>
     </thead>
     <tbody>
@@ -20,7 +21,7 @@
                     <td> {#if sqrt} <span> &radic; </span> <span class="sqrt"> &nbsp;{gate.name.replace("&radic; ", "")}&nbsp; </span> {:else} {gate.name} {/if} </td>
                     <td> {gate.symbol} </td>
                     <td> {gate.size} </td>
-                    <td> {gate.matrix} </td>
+                    <td><Matrix matrix={gate.matrix.matrix} scalar={gate.matrix.scalarString}></Matrix></td>
                     <td class="gate">
                         {#if gate.gate}
                             {@const Gate = gate.gate}

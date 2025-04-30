@@ -14,7 +14,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         matrix: {
             scalarString: "1/sqrt(2)",
             scalar: (delta: Complex) =>  1 / (math.sqrt(2) as number),
-            matrix: math.matrix([[1, 1], [1, -1]]),
+            matrix: [[1, 1], [1, -1]],
         },
     },
     "I": {
@@ -25,7 +25,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
-            matrix: math.matrix([[1, 0], [0, 1]]),
+            matrix: [[1, 0], [0, 1]],
         },
     },
     "P": {
@@ -36,7 +36,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         matrix: {
             scalarString: "e^{i delta}",
             scalar: (delta: Complex) => math.exp(math.multiply(math.complex("i"), delta) as Complex),
-            matrix: math.matrix([[1, 0], [0, 1]]),
+            matrix: [[1, 0], [0, 1]],
         },
     },
     "X": {
@@ -47,7 +47,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
-            matrix: math.matrix([[0, 1], [1, 0]]),
+            matrix: [[0, 1], [1, 0]],
         },
     },
     "Y": {
@@ -58,7 +58,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
-            matrix: math.matrix([[0, math.complex("-i")], [math.complex("i"), 0]]),
+            matrix: [[0, math.complex("-i")], [math.complex("i"), 0]],
         },
     },
     "Z": {
@@ -69,7 +69,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
-            matrix: math.matrix([[1, 0], [0, -1]]),
+            matrix: [[1, 0], [0, -1]],
         },
     },
     "S": {
@@ -80,7 +80,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
-            matrix: math.matrix([[1, 0], [0, math.complex("i")]]),
+            matrix: [[1, 0], [0, math.complex("i")]],
         },
     },
 };

@@ -111,6 +111,10 @@ body.dark {
 	.childOptions {
 		border: 1px solid #dee2e6;
 	}
+	.matrixTable {
+        border-left: 1px solid #f9f9f9;
+        border-right: 1px solid #f9f9f9;
+    }
 }
 
 body.light {
@@ -159,5 +163,10 @@ body.light {
 	.childOptions {
 		border: 1px solid #1e1e1e;
 	}
+	.matrixTable {
+        border-left: 1px solid #1e1e1e;
+        border-right: 1px solid #1e1e1e;
+        border-radius: 16%;
+    }
 }
 

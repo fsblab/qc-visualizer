@@ -135,6 +135,14 @@
             </select>
         </div>
     </div>
+    <div class="childOptions">
+        <label for="calc">
+            Calculate Probabilities:
+        </label>
+        <div class="childOptionsOptions">
+            <button id="calc">Calculate</button>
+        </div>
+    </div>
 </div>
 
 
@@ -147,6 +155,13 @@
     }
     #gateSelect {
         width: 100%;
+    }
+    #calc {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        height: 1.4em;
     }
     .resetPosition {
         display: flex;
