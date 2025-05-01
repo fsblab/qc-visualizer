@@ -1,7 +1,8 @@
 <script lang="ts">
-    import Hgate from "../Gates/Hgate.svelte";
     import type { componentProperties } from "../interfaces";
     import { designStore } from "../stores/design";
+    import GateInfoDialog from "../Gates/GateInfoDialog.svelte";
+
 
     function mouseUp(event: MouseEvent) {
         mousePosOnUp = [event.offsetX, event.offsetY];
@@ -25,36 +26,37 @@
         };
 
         var correctedPos: number[] = [getYPos(0) + yOffset * 2, getYPos(0)];
-        var positionName: string = "";
-        var indexVal: string = "0";
+        var column: number;
+        var indexVal: number = 0;
 
         Array.from({length: numberOfQubits}, (_: any, i: number) => i).forEach((index: number) => {
             const ypos: number = getYPos(index);
             
             if (Math.abs(mousePosOnUp[1] - correctedPos[1]) > Math.abs(ypos - mousePosOnUp[1])) {
                 correctedPos[1] = ypos;
-                indexVal = String(index);
             };
         });
 
         correctedPos[1] -= (fontsize + yOffset) / 2;
-        positionName = indexVal;
-        var indexVal: string = "0";
 
         Array.from({length: 100}, (_: any, i: number) => i).forEach((index: number) => {
             const ypos: number = getYPos(index) + yOffset * 2;
             
             if (Math.abs(mousePosOnUp[0] - correctedPos[0]) > Math.abs(ypos - mousePosOnUp[0])) {
                 correctedPos[0] = ypos;
-                indexVal = String(index);
+                indexVal = index;
             };
         });
 
         correctedPos[0] -= (fontsize + yOffset) / 2;
-        positionName = indexVal + "." + positionName;
+        column = indexVal;
 
-        component!.gates[positionName] = {gate: component!.selectedGate.gate!, position: correctedPos};
+        component!.gates[column] = {gateData: component!.selectedGate, position: correctedPos};
     };
+
+    function deleteGateButtonPressed(column: number) {
+        delete component!.gates[column]
+    }
 
     function getYPos(index: number) {
         return (fontsize + yOffset) * index + fontsize + yOffset;
@@ -82,6 +84,8 @@
     var mousePosOnDown: number[];
     var mousePosOnUp: number[];
     var appliedTranslation: number[] = [0, 0];
+
+    var dialog = $state<HTMLDialogElement>();
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -97,9 +101,16 @@
             </text>
             <line x1={fontsize * 3} y1={getYPos(index)} x2="100%" y2={getYPos(index)} stroke={getColor()} stroke-width={4 * scale} />
         {/each}
-        {#each Object.entries(component!.gates) as [_, gate]}
-            {@const Gate = gate.gate}
-            <Gate position={gate.position} scale={scale} fontsize={fontsize}></Gate>
+        {#each Object.entries(component!.gates) as [column, gate]}
+            {@const Gate = gate.gateData.gate}
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_missing_attribute -->
+            <a onclick={() => {dialog?.showModal()}}>
+                <Gate position={gate.position} scale={scale} fontsize={fontsize}></Gate>
+            </a>
+            <foreignObject>
+                <GateInfoDialog bind:dialog gateData={gate.gateData} deleteGateButtonPressed={() => deleteGateButtonPressed(Number(column))}></GateInfoDialog>
+            </foreignObject>
         {/each}
     </g>
 </svg>

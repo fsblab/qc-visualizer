@@ -6,21 +6,11 @@ import Hgate from "./Hgate.svelte";
 
 export const gates: {[key: string]: gateMetadata | null} = {
     "None": null,
-    "H": {
-        gate: Hgate,
-        name: "Hadamard",
-        symbol: "H",
-        size: 1,
-        matrix: {
-            scalarString: "1/sqrt(2)",
-            scalar: (delta: Complex) =>  1 / (math.sqrt(2) as number),
-            matrix: [[1, 1], [1, -1]],
-        },
-    },
     "I": {
         gate: null,
         name: "Identity",
         symbol: "I",
+        shortKey: "I",
         size: 1,
         matrix: {
             scalarString: "",
@@ -28,13 +18,26 @@ export const gates: {[key: string]: gateMetadata | null} = {
             matrix: [[1, 0], [0, 1]],
         },
     },
+    "H": {
+        gate: Hgate,
+        name: "Hadamard",
+        symbol: "H",
+        shortKey: "H",
+        size: 1,
+        matrix: {
+            scalarString: "1/sqrt(2)",
+            scalar: (delta: Complex) =>  1 / (math.sqrt(2) as number),
+            matrix: [[1, 1], [1, -1]],
+        },
+    },
     "P": {
         gate: null,
         name: "Global Phase",
         symbol: "Ph",
+        shortKey: "P",
         size: 1,
         matrix: {
-            scalarString: "e^{i delta}",
+            scalarString: "e^{i\u03B4}",
             scalar: (delta: Complex) => math.exp(math.multiply(math.complex("i"), delta) as Complex),
             matrix: [[1, 0], [0, 1]],
         },
@@ -43,6 +46,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         gate: null,
         name: "NOT, Pauli X",
         symbol: "X",
+        shortKey: "X",
         size: 1,
         matrix: {
             scalarString: "",
@@ -54,6 +58,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         gate: null,
         name: "Pauli Y",
         symbol: "Y",
+        shortKey: "Y",
         size: 1,
         matrix: {
             scalarString: "",
@@ -65,6 +70,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         gate: null,
         name: "Pauli Z",
         symbol: "Z",
+        shortKey: "Z",
         size: 1,
         matrix: {
             scalarString: "",
@@ -76,6 +82,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         gate: null,
         name: "&radic; Z",
         symbol: "S",
+        shortKey: "S",
         size: 1,
         matrix: {
             scalarString: "",

@@ -21,7 +21,7 @@ export interface circuit {
     value: number,
     selectedGate: gateMetadata | null,
     componentProperties: componentProperties | null,
-    gates: {[key: string]: gate},
+    gates: {[key: number]: gate},
 }
 
 export interface gateProperties {
@@ -42,7 +42,7 @@ export interface tabProperties {
 }
 
 export interface gate {
-    gate: Component<gateProperties>,
+    gateData: gateMetadata,
     position: number[],
 }
 
@@ -50,6 +50,7 @@ export interface gateMetadata {
     gate: Component<gateProperties> | null,
     name: string,
     symbol: string,
+    shortKey: string,
     size: number,
     matrix: {},
 }
