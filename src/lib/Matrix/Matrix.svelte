@@ -9,7 +9,7 @@
             containsPow = true;
             [, before, after] = scalar.match(/(.*)\^\{(.*)\}/)!;
         }
-    })
+    });
 
     var containsSqrt = $state(false);
     var containsPow = $state(false);

@@ -8,7 +8,7 @@
     Components are provided with vertical grey auxiliary lines marking a column. There can only be one gate per column. Placing a gate in a column that already has a gate will delete the original gate. Considering gates that require multiple clicks to be placed, the first click always determines the column such that the second click will always be considered to be in the same column.
 </p>
 <p>
-    Clicking on a placed gate opens a dialog window showing relevant information. Here the gate can be removed from the component.
+    Clicking on a placed gate opens a dialog window showing relevant information. Here the gate can be removed from the component. Additional information concerning the state of the qubit after passing a gate will only be displayed after successful calculation. To this end the "Calculate" button serves to calculate the probability after passing each gate.
 </p>
 
 <style>

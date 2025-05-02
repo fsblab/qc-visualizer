@@ -2,6 +2,7 @@
     import type { componentProperties, gateMetadata } from "../interfaces";
     import { designStore } from "../stores/design";
     import GateInfoDialog from "../Gates/GateInfoDialog.svelte";
+    import { setContext } from "svelte";
 
 
     function mouseUp(event: MouseEvent) {
@@ -27,6 +28,7 @@
 
         var correctedPos: number[] = [getYPos(0) + yOffset * 2, getYPos(0)];
         var column: number;
+        var row: number;
         var indexVal: number = 0;
 
         Array.from({length: numberOfQubits}, (_: any, i: number) => i).forEach((index: number) => {
@@ -34,9 +36,12 @@
             
             if (Math.abs(mousePosOnUp[1] - correctedPos[1]) > Math.abs(ypos - mousePosOnUp[1])) {
                 correctedPos[1] = ypos;
+                indexVal = index
             };
         });
 
+        row = indexVal;
+        indexVal = 0
         correctedPos[1] -= (fontsize + yOffset) / 2;
 
         Array.from({length: 100}, (_: any, i: number) => i).forEach((index: number) => {
@@ -51,12 +56,17 @@
         correctedPos[0] -= (fontsize + yOffset) / 2;
         column = indexVal;
 
-        component!.gates[column] = {gateData: component!.selectedGate, position: correctedPos};
+        const gateData = {...component!.selectedGate, qubit: row}
+        component!.gates[column] = {gateData, position: correctedPos};
     };
 
     function openDialog(column: number) {
         gateColumn = column;
     };
+
+    function closeDialog() {
+        gateColumn = null;
+    }
 
     function deleteGateButtonPressed(column: number) {
         delete component!.gates[column]
@@ -125,7 +135,7 @@
 </svg>
 
 {#if gateColumn != null}
-    <GateInfoDialog bind:dialog gateData={component!.gates[gateColumn].gateData} deleteGateButtonPressed={() => deleteGateButtonPressed(gateColumn as number)}></GateInfoDialog>
+    <GateInfoDialog bind:dialog gateData={component!.gates[gateColumn].gateData} deleteGateButtonPressed={() => deleteGateButtonPressed(gateColumn!)} closeDialog={closeDialog}></GateInfoDialog>
 {/if}
 
 <style>

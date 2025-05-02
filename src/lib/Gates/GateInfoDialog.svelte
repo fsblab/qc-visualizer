@@ -7,19 +7,27 @@
         dialog = $bindable(),
         gateData,
         deleteGateButtonPressed,
-    }: {dialog: HTMLDialogElement, gateData: gateMetadata, deleteGateButtonPressed: any} = $props();
-
+        closeDialog,
+    }: {dialog: HTMLDialogElement, gateData: gateMetadata, deleteGateButtonPressed: any, closeDialog: any} = $props();
 </script>
 
-<dialog bind:this={dialog}>
+<dialog bind:this={dialog} onclose={closeDialog()}>
     <div class="buttons">
-        <button class="deletebutton" onclick={() => {dialog.close(); deleteGateButtonPressed()}}>Delete</button>
+        <button class="deletebutton" onclick={deleteGateButtonPressed}>Delete</button>
         <div class="spacer"> {gateData.name} Gate </div>
-        <button class="closebutton" onclick={() => dialog.close()}>x</button>
+        <button class="closebutton" onclick={() => {dialog.close; closeDialog()}}>x</button>
     </div>
     <div class="metaData">
         <span class="keyshortcut"><span class="text"> Key Shortcut: </span> {gateData.shortKey}</span>
         <span class="matrix"><span class="text"> Matrix: </span> <Matrix scalar={gateData.matrix.scalarString} matrix={gateData.matrix.matrix}></Matrix></span>
+    </div>
+    <div class="divider"></div>
+    <div class="qubitData">
+        {#if gateData.calculationResults}
+            <span class="keyshortcut"><span class="text"> State: </span> <Matrix scalar={""} matrix={[[gateData.calculationResults.up], [gateData.calculationResults.down]]}></Matrix> </span>
+        {:else}
+            <span class="nodata"> No Data. </span>
+        {/if}
     </div>
 </dialog>
 
@@ -41,6 +49,11 @@
         width: 100%;
         font-size: x-large;
         border-radius: 8px;
+    }
+
+    .nodata {
+        width: 100%;
+        font-size: large;
     }
 
     .keyshortcut,

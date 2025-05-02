@@ -52,5 +52,12 @@ export interface gateMetadata {
     symbol: string,
     shortKey: string,
     size: number,
+    qubit?: number,
     matrix: {},
+    calculationResults?: calculationResults,
+}
+
+export interface calculationResults {
+    up: number,
+    down: number,
 }

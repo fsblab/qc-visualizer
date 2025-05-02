@@ -1,6 +1,9 @@
 <script lang="ts">
     import { circuitsState } from "../stores/circuits.svelte";
     import { gates } from "../Gates/gates";
+    import { math } from "../util/math";
+    import type { Matrix } from "mathjs";
+
 
     function validateNumber(val: any) {
         if (isNaN(Number(val))) {
@@ -17,6 +20,24 @@
             return property + 1;
         } else {
             return property - 1;
+        }
+    }
+
+    function calculateComponent() {
+        const register: any[] = [];
+        var counter = 0;
+
+        while (counter < componentProps.numberOfQubits) {
+            register.push(math.matrix([1, 0]));
+            counter++;
+        }
+                
+        for (var key in component.gates) {
+            const qubit: number = component.gates[key].gateData.qubit!;
+            const scalar = component.gates[key].gateData.matrix.scalar(0);
+            const matrix = component.gates[key].gateData.matrix.matrix;
+            register[qubit] = math.multiply(register[qubit], scalar, matrix);
+            component.gates[key].gateData.calculationResults = {up: register[qubit]._data[0], down: register[qubit]._data[1]};
         }
     }
 
@@ -140,7 +161,7 @@
             Calculate Probabilities:
         </label>
         <div class="childOptionsOptions">
-            <button id="calc">Calculate</button>
+            <button id="calc" onclick={() => calculateComponent()}>Calculate</button>
         </div>
     </div>
 </div>
