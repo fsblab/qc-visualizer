@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { componentProperties } from "../interfaces";
+    import type { componentProperties, gateMetadata } from "../interfaces";
     import { designStore } from "../stores/design";
     import GateInfoDialog from "../Gates/GateInfoDialog.svelte";
 
@@ -54,9 +54,14 @@
         component!.gates[column] = {gateData: component!.selectedGate, position: correctedPos};
     };
 
+    function openDialog(column: number) {
+        gateColumn = column;
+    };
+
     function deleteGateButtonPressed(column: number) {
         delete component!.gates[column]
-    }
+        gateColumn = null;
+    };
 
     function getYPos(index: number) {
         return (fontsize + yOffset) * index + fontsize + yOffset;
@@ -68,7 +73,13 @@
         } else {
             return "#1e1e1e";
         };
-    }
+    };
+
+    $effect(() => {
+        if (gateColumn != null) {
+            dialog?.showModal();
+        }
+    });
 
     var {
         numberOfQubits = $bindable(),
@@ -85,7 +96,8 @@
     var mousePosOnUp: number[];
     var appliedTranslation: number[] = [0, 0];
 
-    var dialog = $state<HTMLDialogElement>();
+    var dialog = $state<HTMLDialogElement>()!;
+    var gateColumn = $state<number | null>(null);
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -105,15 +117,16 @@
             {@const Gate = gate.gateData.gate}
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_missing_attribute -->
-            <a onclick={() => {dialog?.showModal()}}>
+            <a onclick={() => {openDialog(Number(column))}}>
                 <Gate position={gate.position} scale={scale} fontsize={fontsize}></Gate>
             </a>
-            <foreignObject>
-                <GateInfoDialog bind:dialog gateData={gate.gateData} deleteGateButtonPressed={() => deleteGateButtonPressed(Number(column))}></GateInfoDialog>
-            </foreignObject>
         {/each}
     </g>
 </svg>
+
+{#if gateColumn != null}
+    <GateInfoDialog bind:dialog gateData={component!.gates[gateColumn].gateData} deleteGateButtonPressed={() => deleteGateButtonPressed(gateColumn as number)}></GateInfoDialog>
+{/if}
 
 <style>
     .svg {

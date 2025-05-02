@@ -1,12 +1,13 @@
 
 <script lang="ts">
+    import type { gateMetadata } from "../interfaces";
     import Matrix from "../Matrix/Matrix.svelte";
 
     var {
         dialog = $bindable(),
         gateData,
         deleteGateButtonPressed,
-    } = $props();
+    }: {dialog: HTMLDialogElement, gateData: gateMetadata, deleteGateButtonPressed: any} = $props();
 
 </script>
 
