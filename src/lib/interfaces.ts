@@ -1,3 +1,4 @@
+import type { Complex } from "mathjs";
 import type { Component, Snippet } from "svelte";
 
 export interface componentProperties {
@@ -58,6 +59,6 @@ export interface gateMetadata {
 }
 
 export interface calculationResults {
-    up: number,
-    down: number,
+    up: Complex,
+    down: Complex,
 }

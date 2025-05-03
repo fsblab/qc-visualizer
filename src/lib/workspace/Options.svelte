@@ -2,7 +2,8 @@
     import { circuitsState } from "../stores/circuits.svelte";
     import { gates } from "../Gates/gates";
     import { math } from "../util/math";
-    import type { Matrix } from "mathjs";
+    import type { Complex, Matrix } from "mathjs";
+    import { get } from "svelte/store";
 
 
     function validateNumber(val: any) {
@@ -15,31 +16,50 @@
         return val;
     };
 
+    function canLowerQubits(direction: number = -1) {
+        var canLower = true;
+
+        if (direction > 0) {
+            return canLower;
+        }
+
+        componentProps.numberOfQubits
+
+        Object.entries(component.gates).forEach(([key, gate]) => {
+            if (gate.gateData.qubit! + 1 == componentProps.numberOfQubits) {
+                canLower = false;
+                return;
+            }
+        });
+
+        return canLower;
+    }
+
     function mouseWheelUsed(direction: number, property: number) {
         if (direction > 0) {
             return property + 1;
         } else {
             return property - 1;
         }
-    }
+    };
 
     function calculateComponent() {
-        const register: any[] = [];
+        const register: Matrix<Complex>[] = [];
         var counter = 0;
 
         while (counter < componentProps.numberOfQubits) {
-            register.push(math.matrix([1, 0]));
+            register.push(math.matrix([math.complex(1, 0), math.complex(0, 0)]) as Matrix<Complex>);
             counter++;
         }
-                
+        
         for (var key in component.gates) {
             const qubit: number = component.gates[key].gateData.qubit!;
             const scalar = component.gates[key].gateData.matrix.scalar(0);
             const matrix = component.gates[key].gateData.matrix.matrix;
             register[qubit] = math.multiply(register[qubit], scalar, matrix);
-            component.gates[key].gateData.calculationResults = {up: register[qubit]._data[0], down: register[qubit]._data[1]};
+            component.gates[key].gateData.calculationResults = {up: register[qubit].get([0]), down: register[qubit].get([1])};
         }
-    }
+    };
 
     var {activeTab = $bindable()} = $props();
 
@@ -80,7 +100,7 @@
             #Qubits:
         </label>
         <div class="childOptionsOptions">
-            <button class="dec" onclick={() => {componentProps.numberOfQubits--}} disabled={componentProps.numberOfQubits === 1}>
+            <button class="dec" onclick={() => {componentProps.numberOfQubits--}} disabled={!canLowerQubits() || componentProps.numberOfQubits === 1}>
                 <MsArrowLeft></MsArrowLeft>
             </button>
             <input
@@ -89,7 +109,7 @@
                 id="numberOfQubits"
                 value={componentProps.numberOfQubits}
                 onchange={(event: Event) => {componentProps.numberOfQubits = event.target?.value; componentProps.numberOfQubits = validateNumber(componentProps.numberOfQubits)}}
-                onwheel={(event: Event) => {componentProps.numberOfQubits = mouseWheelUsed(event.wheelDelta, componentProps.numberOfQubits)}}
+                onwheel={(event: Event) => {canLowerQubits(event.wheelDelta) ? componentProps.numberOfQubits = mouseWheelUsed(event.wheelDelta, componentProps.numberOfQubits) : 0}}
             />
             <button class="inc" onclick={() => {componentProps.numberOfQubits++}}>
                 <MsArrowRight></MsArrowRight>

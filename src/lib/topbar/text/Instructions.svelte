@@ -10,6 +10,9 @@
 <p>
     Clicking on a placed gate opens a dialog window showing relevant information. Here the gate can be removed from the component. Additional information concerning the state of the qubit after passing a gate will only be displayed after successful calculation. To this end the "Calculate" button serves to calculate the probability after passing each gate.
 </p>
+<p>
+    A qubit is always initialized in an up state while the amplitudes are complex numbers.
+</p>
 
 <style>
     p {

@@ -26,7 +26,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         size: 1,
         matrix: {
             scalarString: "1/sqrt(2)",
-            scalar: (delta: Complex) =>  1 / (math.sqrt(2) as number),
+            scalar: (delta: Complex) => 1 / (math.sqrt(2) as number),
             matrix: [[1, 1], [1, -1]],
         },
     },

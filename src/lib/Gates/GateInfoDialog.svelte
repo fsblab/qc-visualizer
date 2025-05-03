@@ -2,6 +2,7 @@
 <script lang="ts">
     import type { gateMetadata } from "../interfaces";
     import Matrix from "../Matrix/Matrix.svelte";
+    import State from "../State/State.svelte";
 
     var {
         dialog = $bindable(),
@@ -24,7 +25,7 @@
     <div class="divider"></div>
     <div class="qubitData">
         {#if gateData.calculationResults}
-            <span class="keyshortcut"><span class="text"> State: </span> <Matrix scalar={""} matrix={[[gateData.calculationResults.up], [gateData.calculationResults.down]]}></Matrix> </span>
+            <span class="keyshortcut"><span class="text"> State: </span> <State z={[gateData.calculationResults.up, gateData.calculationResults.down]}></State> </span>
         {:else}
             <span class="nodata"> No Data. </span>
         {/if}
