@@ -12,6 +12,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "I",
         shortKey: "I",
         size: 1,
+        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
@@ -24,6 +25,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "H",
         shortKey: "H",
         size: 1,
+        isControlGate: false,
         matrix: {
             scalarString: "1/sqrt(2)",
             scalar: (delta: Complex) => 1 / (math.sqrt(2) as number),
@@ -36,6 +38,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "Ph",
         shortKey: "P",
         size: 1,
+        isControlGate: false,
         matrix: {
             scalarString: "e^{i\u03B4}",
             scalar: (delta: Complex) => math.exp(math.multiply(math.complex("i"), delta) as Complex),
@@ -48,6 +51,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "X",
         shortKey: "X",
         size: 1,
+        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
@@ -60,6 +64,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "Y",
         shortKey: "Y",
         size: 1,
+        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
@@ -72,6 +77,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "Z",
         shortKey: "Z",
         size: 1,
+        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
@@ -84,6 +90,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         symbol: "S",
         shortKey: "S",
         size: 1,
+        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,

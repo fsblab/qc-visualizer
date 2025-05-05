@@ -3,7 +3,6 @@
     import { gates } from "../Gates/gates";
     import { math } from "../util/math";
     import type { Complex, Matrix } from "mathjs";
-    import { get } from "svelte/store";
 
 
     function validateNumber(val: any) {
@@ -51,13 +50,40 @@
             register.push(math.matrix([math.complex(1, 0), math.complex(0, 0)]) as Matrix<Complex>);
             counter++;
         }
-        
-        for (var key in component.gates) {
-            const qubit: number = component.gates[key].gateData.qubit!;
+
+        const sortedKeys = Object.keys(component.gates).sort();
+
+        const sortedGates = sortedKeys.reduce((acc, key: any) => {
+        	acc[key] = component.gates[key];
+        	return acc;
+        }, {});
+
+        var key: any;
+
+        for (key in sortedGates) {
+            const qubits: number[] = component.gates[key].gateData.qubit!;
             const scalar = component.gates[key].gateData.matrix.scalar(0);
             const matrix = component.gates[key].gateData.matrix.matrix;
-            register[qubit] = math.multiply(register[qubit], scalar, matrix);
-            component.gates[key].gateData.calculationResults = {up: register[qubit].get([0]), down: register[qubit].get([1])};
+            var qubitVector: Complex[] = [];
+
+            if (component.gates[key].gateData.controlQubit) {
+                qubitVector.push(register[component.gates[key].gateData.controlQubit!].get([0]));
+                qubitVector.push(register[component.gates[key].gateData.controlQubit!].get([1]));
+            }
+
+            for (var qubit in qubits) {
+                qubitVector.push(register[qubit].get([0]));
+                qubitVector.push(register[qubit].get([1]));
+            }
+
+            const calculationResults: Matrix<Complex> = math.multiply(qubitVector, scalar, matrix);
+            component.gates[key].gateData.calculationResults = [];
+            var counter = 0;
+
+            while (calculationResults.length > counter) {
+                component.gates[key].gateData.calculationResults?.push({up: calculationResults[counter], down: calculationResults[counter + 1]});
+                counter += 2;
+            }
         }
     };
 

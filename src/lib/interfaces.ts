@@ -53,9 +53,11 @@ export interface gateMetadata {
     symbol: string,
     shortKey: string,
     size: number,
-    qubit?: number,
+    isControlGate: boolean,
+    controlQubit?: number,
+    qubit?: number[],
     matrix: {},
-    calculationResults?: calculationResults,
+    calculationResults?: calculationResults[],
 }
 
 export interface calculationResults {

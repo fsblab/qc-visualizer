@@ -67,7 +67,6 @@
         flex-direction: row;
     }
 
-    .unitcircle,
     .amplitudes {
         display: flex;
         flex-direction: column;

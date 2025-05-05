@@ -10,13 +10,16 @@
         deleteGateButtonPressed,
         closeDialog,
     }: {dialog: HTMLDialogElement, gateData: gateMetadata, deleteGateButtonPressed: any, closeDialog: any} = $props();
+
+    const psi = "\u03C8";
+    var minIndex: number = Math.min(...gateData.qubit!);
 </script>
 
 <dialog bind:this={dialog} onclose={closeDialog()}>
     <div class="buttons">
         <button class="deletebutton" onclick={deleteGateButtonPressed}>Delete</button>
         <div class="spacer"> {gateData.name} Gate </div>
-        <button class="closebutton" onclick={() => {dialog.close; closeDialog()}}>x</button>
+        <button class="closebutton" onclick={() => {dialog.close; closeDialog()}}> x </button>
     </div>
     <div class="metaData">
         <span class="keyshortcut"><span class="text"> Key Shortcut: </span> {gateData.shortKey}</span>
@@ -25,7 +28,9 @@
     <div class="divider"></div>
     <div class="qubitData">
         {#if gateData.calculationResults}
-            <span class="keyshortcut"><span class="text"> State: </span> <State z={[gateData.calculationResults.up, gateData.calculationResults.down]}></State> </span>
+            {#each gateData.qubit! as index}
+                <span class="keyshortcut"><span class="text"><div> {psi}<sub>{index}</sub> = </div></span> <State z={[gateData.calculationResults[index - minIndex].up, gateData.calculationResults[index - minIndex].down]}></State> </span>
+            {/each}
         {:else}
             <span class="nodata"> No Data. </span>
         {/if}

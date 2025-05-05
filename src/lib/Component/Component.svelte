@@ -1,12 +1,15 @@
 <script lang="ts">
-    import type { componentProperties, gateMetadata } from "../interfaces";
+    import type { componentProperties } from "../interfaces";
     import { designStore } from "../stores/design";
-    import GateInfoDialog from "../Gates/GateInfoDialog.svelte";
-    import { setContext } from "svelte";
-
+    import { math } from "../util/math";
+    
 
     function mouseUp(event: MouseEvent) {
         mousePosOnUp = [event.offsetX, event.offsetY];
+
+        if (component!.selectedGate?.size! > component!.componentProperties?.numberOfQubits!) {
+            return
+        }
 
         if (mousePosOnUp[0] != mousePosOnDown[0] || mousePosOnUp[1] != mousePosOnDown[1]) {
             moveSvg();
@@ -55,17 +58,52 @@
 
         correctedPos[0] -= (fontsize + yOffset) / 2;
         column = indexVal;
+        var gateData;
 
-        const gateData = {...component!.selectedGate, qubit: row}
-        component!.gates[column] = {gateData, position: correctedPos};
+        if (component!.selectedGate.isControlGate && component!.selectedGate.controlQubit === undefined) {
+            gateData = {...component!.selectedGate, controlQubit: row};
+            component!.gates[column] = {gateData, position: correctedPos};
+            columnWhichAControlQubitIsCurrentlyBeingPlacedOn = column;
+        } else if (component!.selectedGate.isControlGate && component!.selectedGate.controlQubit !== undefined) {
+            const rows: number[] = determineRows(row);
+            component!.gates[columnWhichAControlQubitIsCurrentlyBeingPlacedOn!].gateData.qubit = rows;
+            columnWhichAControlQubitIsCurrentlyBeingPlacedOn = null;
+        } else {
+            const rows: number[] = determineRows(row);
+            gateData = {...component!.selectedGate, qubit: rows};
+            component!.gates[column] = {gateData, position: correctedPos};
+        }
     };
 
-    function openDialog(column: number) {
+    function determineRows(row: number): number[] {
+        if (component!.selectedGate!.isControlGate) {
+
+        }
+
+        var rows: number[] = [];
+        var counter: number = component?.selectedGate!.size!
+
+        while (component?.componentProperties?.numberOfQubits! - row < component?.selectedGate!.size! - 1) {
+            row--;
+        }
+
+        while (counter) {
+            rows.push(row);
+            row++;
+            counter--;
+        }
+
+        return rows;
+    }
+
+    async function openDialog(column: number) {
+        GateInfoDialog = (await import("../Gates/GateInfoDialog.svelte")).default;
         gateColumn = column;
     };
 
     function closeDialog() {
         gateColumn = null;
+        GateInfoDialog = null;
     }
 
     function deleteGateButtonPressed(column: number) {
@@ -108,6 +146,9 @@
 
     var dialog = $state<HTMLDialogElement>()!;
     var gateColumn = $state<number | null>(null);
+    var columnWhichAControlQubitIsCurrentlyBeingPlacedOn: number | null = null;
+
+    var GateInfoDialog = $state<any>(null);;
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
