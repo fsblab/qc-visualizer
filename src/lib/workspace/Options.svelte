@@ -2,7 +2,7 @@
     import { circuitsState } from "../stores/circuits.svelte";
     import { gates } from "../Gates/gates";
     import { math } from "../util/math";
-    import type { Complex, Matrix } from "mathjs";
+    import { complex, type Complex, type Matrix } from "mathjs";
 
 
     function validateNumber(val: any) {
@@ -22,10 +22,8 @@
             return canLower;
         }
 
-        componentProps.numberOfQubits
-
         Object.entries(component.gates).forEach(([key, gate]) => {
-            if (gate.gateData.qubit! + 1 == componentProps.numberOfQubits) {
+            if (Math.max(...gate.gateData.qubit!) + 1 == componentProps.numberOfQubits) {
                 canLower = false;
                 return;
             }
@@ -62,28 +60,42 @@
 
         for (key in sortedGates) {
             const qubits: number[] = component.gates[key].gateData.qubit!;
-            const scalar = component.gates[key].gateData.matrix.scalar(0);
+            const scalar = component.gates[key].gateData.matrix.scalar();
             const matrix = component.gates[key].gateData.matrix.matrix;
             var qubitVector: Complex[] = [];
-
+            
             if (component.gates[key].gateData.controlQubit) {
                 qubitVector.push(register[component.gates[key].gateData.controlQubit!].get([0]));
                 qubitVector.push(register[component.gates[key].gateData.controlQubit!].get([1]));
             }
-
-            for (var qubit in qubits) {
+            
+            for (var qubit of qubits) {
                 qubitVector.push(register[qubit].get([0]));
                 qubitVector.push(register[qubit].get([1]));
             }
-
+            
             const calculationResults: Matrix<Complex> = math.multiply(qubitVector, scalar, matrix);
             component.gates[key].gateData.calculationResults = [];
             var counter = 0;
-
-            while (calculationResults.length > counter) {
+                
+            while (counter < calculationResults.length) {
                 component.gates[key].gateData.calculationResults?.push({up: calculationResults[counter], down: calculationResults[counter + 1]});
                 counter += 2;
             }
+
+            counter = 0;
+
+            if (component.gates[key].gateData.controlQubit) {
+                register[component.gates[key].gateData.controlQubit!] = math.matrix([calculationResults[0], calculationResults[1]]);
+                counter = 2;
+            }
+
+            for (var qubit of qubits) {
+                register[Number(qubit)] = math.matrix([calculationResults[counter], calculationResults[counter + 1]]);
+                counter += 2;
+            }
+
+            console.log(register);
         }
     };
 

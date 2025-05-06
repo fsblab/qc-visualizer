@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { componentProperties } from "../interfaces";
     import { designStore } from "../stores/design";
-    import { math } from "../util/math";
     
 
     function mouseUp(event: MouseEvent) {
@@ -169,7 +168,7 @@
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_missing_attribute -->
             <a onclick={() => {openDialog(Number(column))}}>
-                <Gate position={gate.position} scale={scale} fontsize={fontsize}></Gate>
+                <Gate position={gate.position} scale={scale} fontsize={fontsize} size={gate.gateData.size} symbol={gate.gateData.symbol}></Gate>
             </a>
         {/each}
     </g>

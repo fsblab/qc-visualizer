@@ -1,13 +1,13 @@
 import { math } from "../util/math"
 import type { Complex } from "mathjs";
 import type { gateMetadata } from "../interfaces";
-import Hgate from "./Hgate.svelte";
+import BaseGate from "./BaseGate.svelte";
 
 
 export const gates: {[key: string]: gateMetadata | null} = {
     "None": null,
     "I": {
-        gate: null,
+        gate: BaseGate,
         name: "Identity",
         symbol: "I",
         shortKey: "I",
@@ -20,7 +20,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "H": {
-        gate: Hgate,
+        gate: BaseGate,
         name: "Hadamard",
         symbol: "H",
         shortKey: "H",
@@ -46,7 +46,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "X": {
-        gate: null,
+        gate: BaseGate,
         name: "NOT, Pauli X",
         symbol: "X",
         shortKey: "X",
@@ -59,7 +59,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "Y": {
-        gate: null,
+        gate: BaseGate,
         name: "Pauli Y",
         symbol: "Y",
         shortKey: "Y",
@@ -72,7 +72,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "Z": {
-        gate: null,
+        gate: BaseGate,
         name: "Pauli Z",
         symbol: "Z",
         shortKey: "Z",
@@ -85,7 +85,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "S": {
-        gate: null,
+        gate: BaseGate,
         name: "&radic; Z",
         symbol: "S",
         shortKey: "S",

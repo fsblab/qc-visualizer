@@ -1,4 +1,4 @@
-import type { Complex } from "mathjs";
+import type { Complex, Matrix } from "mathjs";
 import type { Component, Snippet } from "svelte";
 
 export interface componentProperties {
@@ -29,6 +29,8 @@ export interface gateProperties {
     position: number[],
     scale: number,
     fontsize: number,
+    size: number,
+    symbol: string,
 }
 
 export interface tabProperties {
@@ -56,7 +58,11 @@ export interface gateMetadata {
     isControlGate: boolean,
     controlQubit?: number,
     qubit?: number[],
-    matrix: {},
+    matrix: {
+        scalarString: string,
+        scalar: Function,
+        matrix: Array<Array<any>>
+    },
     calculationResults?: calculationResults[],
 }
 

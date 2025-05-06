@@ -29,7 +29,14 @@
     <div class="qubitData">
         {#if gateData.calculationResults}
             {#each gateData.qubit! as index}
-                <span class="keyshortcut"><span class="text"><div> {psi}<sub>{index}</sub> = </div></span> <State z={[gateData.calculationResults[index - minIndex].up, gateData.calculationResults[index - minIndex].down]}></State> </span>
+                <span class="keyshortcut">
+                    <span class="text">
+                        <div> {psi}
+                            <sub>{index}</sub> = 
+                        </div>
+                    </span>
+                    <State z={[gateData.calculationResults[index - minIndex].up, gateData.calculationResults[index - minIndex].down]}></State>
+                </span>
             {/each}
         {:else}
             <span class="nodata"> No Data. </span>
