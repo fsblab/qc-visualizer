@@ -168,7 +168,7 @@
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_missing_attribute -->
             <a onclick={() => {openDialog(Number(column))}}>
-                <Gate position={gate.position} scale={scale} fontsize={fontsize} size={gate.gateData.size} symbol={gate.gateData.symbol}></Gate>
+                <Gate position={gate.position} scale={scale} fontsize={fontsize} size={gate.gateData.size} symbol={gate.gateData.symbol} param={gate.gateData.matrix.parameter}></Gate>
             </a>
         {/each}
     </g>

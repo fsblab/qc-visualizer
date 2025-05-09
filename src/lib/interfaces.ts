@@ -26,11 +26,13 @@ export interface circuit {
 }
 
 export interface gateProperties {
+    children?: Snippet,
     position: number[],
     scale: number,
     fontsize: number,
     size: number,
     symbol: string,
+    param?: number,
 }
 
 export interface tabProperties {
@@ -50,7 +52,7 @@ export interface gate {
 }
 
 export interface gateMetadata {
-    gate: Component<gateProperties> | any | null,
+    gate: any | null,   //formerly Component<gateProperties>
     name: string,
     symbol: string,
     shortKey: string,
@@ -59,6 +61,7 @@ export interface gateMetadata {
     controlQubit?: number,
     qubit?: number[],
     matrix: {
+        parameter?: number,
         scalarString: string,
         scalar: Function,
         matrix: Array<Array<any>>

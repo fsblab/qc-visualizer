@@ -60,7 +60,7 @@
 
         for (key in sortedGates) {
             const qubits: number[] = component.gates[key].gateData.qubit!;
-            const scalar = component.gates[key].gateData.matrix.scalar();
+            const scalar = component.gates[key].gateData.matrix.scalar(component.gates[key].gateData.matrix.parameter);
             const matrix = component.gates[key].gateData.matrix.matrix;
             var qubitVector: Complex[] = [];
             
@@ -94,8 +94,6 @@
                 register[Number(qubit)] = math.matrix([calculationResults[counter], calculationResults[counter + 1]]);
                 counter += 2;
             }
-
-            console.log(register);
         }
     };
 

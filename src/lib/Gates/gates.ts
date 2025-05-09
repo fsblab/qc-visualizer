@@ -32,13 +32,14 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "P": {
-        gate: null,
+        gate: async () => (await import("./GlobalPhaseGate.svelte")).default,
         name: "Global Phase",
         symbol: "Ph",
         shortKey: "P",
         size: 1,
         isControlGate: false,
         matrix: {
+            parameter: 0,
             scalarString: "e^{i\u03B4}",
             scalar: (delta: Complex) => math.exp(math.multiply(math.complex("i"), delta) as Complex),
             matrix: [[1, 0], [0, 1]],
