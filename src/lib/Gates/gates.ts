@@ -1,13 +1,12 @@
 import { math } from "../util/math"
 import type { Complex } from "mathjs";
 import type { gateMetadata } from "../interfaces";
-import BaseGate from "./BaseGate.svelte";
 
 
 export const gates: {[key: string]: gateMetadata | null} = {
     "None": null,
     "I": {
-        gate: BaseGate,
+        gate: async () => (await import("./BaseGate.svelte")).default,
         name: "Identity",
         symbol: "I",
         shortKey: "I",
@@ -20,7 +19,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "H": {
-        gate: BaseGate,
+        gate: async () => (await import("./BaseGate.svelte")).default,
         name: "Hadamard",
         symbol: "H",
         shortKey: "H",
@@ -46,8 +45,8 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "X": {
-        gate: BaseGate,
-        name: "NOT, Pauli X",
+        gate: async () => (await import("./BaseGate.svelte")).default,
+        name: "Pauli X (NOT)",
         symbol: "X",
         shortKey: "X",
         size: 1,
@@ -59,7 +58,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "Y": {
-        gate: BaseGate,
+        gate: async () => (await import("./BaseGate.svelte")).default,
         name: "Pauli Y",
         symbol: "Y",
         shortKey: "Y",
@@ -72,7 +71,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "Z": {
-        gate: BaseGate,
+        gate: async () => (await import("./BaseGate.svelte")).default,
         name: "Pauli Z",
         symbol: "Z",
         shortKey: "Z",
@@ -85,7 +84,7 @@ export const gates: {[key: string]: gateMetadata | null} = {
         },
     },
     "S": {
-        gate: BaseGate,
+        gate: async () => (await import("./BaseGate.svelte")).default,
         name: "&radic; Z",
         symbol: "S",
         shortKey: "S",

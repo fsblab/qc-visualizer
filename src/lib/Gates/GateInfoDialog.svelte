@@ -12,10 +12,10 @@
     }: {dialog: HTMLDialogElement, gateData: gateMetadata, deleteGateButtonPressed: any, closeDialog: any} = $props();
 
     const psi = "\u03C8";
-    var minIndex: number = Math.min(...gateData.qubit!);
+    const minIndex: number = Math.min(...gateData.qubit!);
 </script>
 
-<dialog bind:this={dialog} onclose={closeDialog()}>
+<dialog bind:this={dialog} onclose={() => {dialog.close; closeDialog()}}>
     <div class="buttons">
         <button class="deletebutton" onclick={deleteGateButtonPressed}>Delete</button>
         <div class="spacer"> {gateData.name} Gate </div>

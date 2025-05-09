@@ -1,9 +1,7 @@
 <script lang="ts">
-    import Component from "../Component/Component.svelte";
+    import { onMount } from "svelte";
     import { gates } from "../Gates/gates";
-    import Tabs from "../Tabs/Tabs.svelte";
     import { circuitsState } from "../stores/circuits.svelte";
-    import Options from "./Options.svelte";
 
     addEventListener("keydown", (event: KeyboardEvent) => {
         if (event.key == "Escape") {
@@ -13,9 +11,18 @@
         }
     });
 
-    $: component = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)];
-    $: componentProps = circuitsState.getComponentProperties(activeTab);
-    $: activeTab = 0;
+    var activeTab = $state<number>(0);
+    var component = $derived<any>(circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)]);
+    var componentProps = $derived<any>(circuitsState.getComponentProperties(activeTab));
+    var Tabs = $state<any>(null);
+    var Options = $state<any>(null);
+    var Component = $state<any>(null);
+
+    onMount(async () => {
+        Options = (await import('./Options.svelte')).default;
+        Tabs = (await import('../Tabs/Tabs.svelte')).default;
+        Component = (await import('../Component/Component.svelte')).default;
+    });
 </script>
 
 <div class="workspace">

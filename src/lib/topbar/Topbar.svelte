@@ -1,6 +1,13 @@
 <script lang="ts">
-    import Darkmode from "./Darkmode.svelte";
-    import Info from "./Info.svelte";
+    import { onMount } from "svelte";
+
+    onMount(async () => {
+        Darkmode = (await import('./Darkmode.svelte')).default;
+        Info = (await import('./Info.svelte')).default;
+    });
+
+    var Darkmode = $state<any>(null);
+    var Info = $state<any>(null);
 </script>
 
 <div class="topbar">

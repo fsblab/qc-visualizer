@@ -1,6 +1,13 @@
 <script lang="ts">
-	import Topbar from "./lib/topbar/Topbar.svelte";
-    import Workspace from "./lib/workspace/Workspace.svelte";
+    import { onMount } from "svelte";
+
+	onMount(async () => {
+		Topbar = (await import('./lib/topbar/Topbar.svelte')).default;
+		Workspace = (await import('./lib/workspace/Workspace.svelte')).default;
+	});
+
+	var Topbar = $state<any>(null);
+	var Workspace = $state<any>(null);
 </script>
 
 <main>

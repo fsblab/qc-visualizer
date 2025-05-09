@@ -2,7 +2,7 @@
     import { circuitsState } from "../stores/circuits.svelte";
     import { gates } from "../Gates/gates";
     import { math } from "../util/math";
-    import { complex, type Complex, type Matrix } from "mathjs";
+    import { type Complex, type Matrix } from "mathjs";
 
 
     function validateNumber(val: any) {

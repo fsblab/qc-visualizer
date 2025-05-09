@@ -50,7 +50,7 @@ export interface gate {
 }
 
 export interface gateMetadata {
-    gate: Component<gateProperties> | null,
+    gate: Component<gateProperties> | any | null,
     name: string,
     symbol: string,
     shortKey: string,

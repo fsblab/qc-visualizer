@@ -23,7 +23,7 @@
         currentTranslation = [currentTranslation[0] + appliedTranslation[0], currentTranslation[1] + appliedTranslation[1]];
     };
 
-    function setGate() {
+    async function setGate() {
         if (component?.selectedGate === null) {
             return;
         };
@@ -69,7 +69,7 @@
             columnWhichAControlQubitIsCurrentlyBeingPlacedOn = null;
         } else {
             const rows: number[] = determineRows(row);
-            gateData = {...component!.selectedGate, qubit: rows};
+            gateData = {...component!.selectedGate, gate: await component!.selectedGate.gate(), qubit: rows};
             component!.gates[column] = {gateData, position: correctedPos};
         }
     };
