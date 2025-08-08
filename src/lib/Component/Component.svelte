@@ -59,31 +59,60 @@
         column = indexVal;
         var gateData;
 
-        if (component!.selectedGate.isControlGate && component!.selectedGate.controlQubit === undefined) {
-            gateData = {...component!.selectedGate, controlQubit: row};
+        if (component!.selectedGate.isControlGate && columnWhichAControlQubitIsCurrentlyBeingPlacedOn === null) {
+            component!.selectedGate.controlQubit = row
+            gateData = {...component!.selectedGate, gate: await component!.selectedGate.gate(), qubit: [row], controlQubit: row};
             component!.gates[column] = {gateData, position: correctedPos};
             columnWhichAControlQubitIsCurrentlyBeingPlacedOn = column;
-        } else if (component!.selectedGate.isControlGate && component!.selectedGate.controlQubit !== undefined) {
+        } else if (component!.selectedGate.isControlGate && columnWhichAControlQubitIsCurrentlyBeingPlacedOn !== null) {
             const rows: number[] = determineRows(row);
-            component!.gates[columnWhichAControlQubitIsCurrentlyBeingPlacedOn!].gateData.qubit = rows;
+            const xpos = component!.gates[columnWhichAControlQubitIsCurrentlyBeingPlacedOn].position[0];
+
+            if (rows.length != 0) {
+                component!.gates[columnWhichAControlQubitIsCurrentlyBeingPlacedOn!].gateData.qubit = rows;
+                component!.gates[columnWhichAControlQubitIsCurrentlyBeingPlacedOn!].position.push(xpos, correctedPos[1]);
+            } else {
+                delete component!.gates[columnWhichAControlQubitIsCurrentlyBeingPlacedOn!];
+            }
+            
             columnWhichAControlQubitIsCurrentlyBeingPlacedOn = null;
         } else {
+            if (columnWhichAControlQubitIsCurrentlyBeingPlacedOn !== null) {
+                delete component!.gates[columnWhichAControlQubitIsCurrentlyBeingPlacedOn!];
+                columnWhichAControlQubitIsCurrentlyBeingPlacedOn = null
+            }
+
             const rows: number[] = determineRows(row);
-            gateData = {...component!.selectedGate, gate: await component!.selectedGate.gate(), qubit: rows};
-            component!.gates[column] = {gateData, position: correctedPos};
+
+            if (rows.length != 0) {
+                gateData = {...component!.selectedGate, gate: await component!.selectedGate.gate(), qubit: rows};
+                component!.gates[column] = {gateData, position: correctedPos};
+            }
         }
     };
 
     function determineRows(row: number): number[] {
-        if (component!.selectedGate!.isControlGate) {
+        var numberOfQubits = component?.componentProperties?.numberOfQubits!;
+        var size = component?.selectedGate!.size!;
 
+        if (component!.selectedGate!.isControlGate) {
+            if (row == component!.selectedGate!.controlQubit) {
+                return [];
+            }
+            
+            numberOfQubits = component!.selectedGate!.controlQubit! - row > 0 ? component!.selectedGate!.controlQubit! : numberOfQubits;
+            size = component?.selectedGate!.size! - 1
         }
 
         var rows: number[] = [];
-        var counter: number = component?.selectedGate!.size!
+        var counter: number = size;
 
-        while (component?.componentProperties?.numberOfQubits! - row < component?.selectedGate!.size! - 1) {
+        while (numberOfQubits! - row < size - 1) {
             row--;
+        }
+
+        if (numberOfQubits! - row < size - 1) {
+            return [];
         }
 
         while (counter) {
@@ -168,14 +197,36 @@
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_missing_attribute -->
             <a onclick={() => {openDialog(Number(column))}}>
-                <Gate position={gate.position} scale={scale} fontsize={fontsize} size={gate.gateData.size} symbol={gate.gateData.symbol} param={gate.gateData.matrix.parameter}></Gate>
+                {#if gate.gateData.isControlGate}
+                    <Gate
+                        gateData={gate.gateData}
+                        position={gate.position}
+                        scale={scale}
+                        offset={yOffset}
+                    ></Gate>
+                {:else}
+                    <Gate
+                        position={gate.position}
+                        scale={scale}
+                        fontsize={fontsize}
+                        size={gate.gateData.size}
+                        symbol={gate.gateData.symbol}
+                        param={gate.gateData.matrix.parameter}
+                    ></Gate>
+                {/if}
             </a>
         {/each}
     </g>
 </svg>
 
 {#if gateColumn != null}
-    <GateInfoDialog bind:dialog gateData={component!.gates[gateColumn].gateData} deleteGateButtonPressed={() => deleteGateButtonPressed(gateColumn!)} closeDialog={closeDialog}></GateInfoDialog>
+    <GateInfoDialog
+        bind:dialog
+        numberOfQubits={numberOfQubits}
+        gateData={component!.gates[gateColumn].gateData}
+        deleteGateButtonPressed={() => deleteGateButtonPressed(gateColumn!)}
+        closeDialog={closeDialog}
+    ></GateInfoDialog>
 {/if}
 
 <style>

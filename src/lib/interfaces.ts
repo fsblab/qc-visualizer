@@ -66,10 +66,5 @@ export interface gateMetadata {
         scalar: Function,
         matrix: Array<Array<any>>
     },
-    calculationResults?: calculationResults[],
-}
-
-export interface calculationResults {
-    up: Complex,
-    down: Complex,
+    calculationResults?: Complex[],
 }

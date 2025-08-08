@@ -1,8 +1,8 @@
 <script lang="ts">
     import { circuitsState } from "../stores/circuits.svelte";
     import { gates } from "../Gates/gates";
-    import { math } from "../util/math";
-    import { type Complex, type Matrix } from "mathjs";
+    import { math, range } from "../util/math";
+    import { Matrix, type Complex } from "mathjs";
 
 
     function validateNumber(val: any) {
@@ -41,63 +41,55 @@
     };
 
     function calculateComponent() {
-        const register: Matrix<Complex>[] = [];
-        var counter = 0;
+        const sizeOfStateVector: number = math.pow(2, componentProps.numberOfQubits) as number;
+        const stateVector: Matrix<Complex> = math.zeros(sizeOfStateVector) as Matrix<Complex>;
 
-        while (counter < componentProps.numberOfQubits) {
-            register.push(math.matrix([math.complex(1, 0), math.complex(0, 0)]) as Matrix<Complex>);
-            counter++;
+        //init statevector i.e. [1+0i |00>, 0+0i |01>, 0+0i |10>, 0+0i |11>]
+        for (const index of range(1, sizeOfStateVector - 1)) {
+            stateVector.set([index], math.complex(0, 0));
         }
 
+        stateVector.set([0], math.complex(1, 0));
+        
         const sortedKeys = Object.keys(component.gates).sort();
-
-        const sortedGates = sortedKeys.reduce((acc, key: any) => {
-        	acc[key] = component.gates[key];
+        
+        const sortedGates: Array<any> = sortedKeys.reduce((acc: any, key: any) => {
+            acc[key] = component.gates[key];
         	return acc;
         }, {});
+        
+        for (const key in sortedGates) {
+            const gateData = component.gates[key].gateData;
+            const qubits: number[] = gateData.qubit!;
+            const cqubit: number | undefined = gateData.controlQubit;
+            const scalar = gateData.matrix.scalar(gateData.matrix.parameter);
+            const matrix = gateData.matrix.matrix;
+            const totalQubits = qubits.length + (cqubit ? 1 : 0)
 
-        var key: any;
+            // https://quantumcomputing.stackexchange.com/questions/14066/how-do-i-apply-the-hadamard-gate-to-one-qubit-in-a-two-qubit-pure-state
+            const id2 = math.identity(2) as Matrix;
+            var gateMatrix = qubits.includes(0) || 0 == cqubit ? matrix : math.identity(2) as Matrix;
 
-        for (key in sortedGates) {
-            const qubits: number[] = component.gates[key].gateData.qubit!;
-            const scalar = component.gates[key].gateData.matrix.scalar(component.gates[key].gateData.matrix.parameter);
-            const matrix = component.gates[key].gateData.matrix.matrix;
-            var qubitVector: Complex[] = [];
-            
-            if (component.gates[key].gateData.controlQubit) {
-                qubitVector.push(register[component.gates[key].gateData.controlQubit!].get([0]));
-                qubitVector.push(register[component.gates[key].gateData.controlQubit!].get([1]));
-            }
-            
-            for (var qubit of qubits) {
-                qubitVector.push(register[qubit].get([0]));
-                qubitVector.push(register[qubit].get([1]));
-            }
-            
-            const calculationResults: Matrix<Complex> = math.multiply(qubitVector, scalar, matrix);
-            component.gates[key].gateData.calculationResults = [];
-            var counter = 0;
-                
-            while (counter < calculationResults.length) {
-                component.gates[key].gateData.calculationResults?.push({up: calculationResults[counter], down: calculationResults[counter + 1]});
-                counter += 2;
+            for (var index = 1; index < componentProps.numberOfQubits;) {
+                if (qubits.includes(index) || index == cqubit) {
+                    gateMatrix = math.kron(gateMatrix, matrix);
+                    index += totalQubits;
+                } else {
+                    gateMatrix = math.kron(gateMatrix, id2);
+                    index += 1;
+                }
             }
 
-            counter = 0;
+            const calculationResults: Matrix<Complex> = math.multiply(gateMatrix, scalar, stateVector);
+            component.gates[key].gateData.calculationResults = calculationResults as any;
 
-            if (component.gates[key].gateData.controlQubit) {
-                register[component.gates[key].gateData.controlQubit!] = math.matrix([calculationResults[0], calculationResults[1]]);
-                counter = 2;
-            }
-
-            for (var qubit of qubits) {
-                register[Number(qubit)] = math.matrix([calculationResults[counter], calculationResults[counter + 1]]);
-                counter += 2;
+            for (const index of range(0, sizeOfStateVector - 1)) {
+                stateVector.set([index], calculationResults.get([index]));
             }
         }
     };
 
-    var {activeTab = $bindable()} = $props();
+    var { activeTab = $bindable() } = $props();
 
     var circuit = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)];
     var component = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)];
@@ -200,7 +192,7 @@
         <div class="childOptionsOptions">
             <select bind:value={component.selectedGate} id="gateSelect">
                 {#each Object.entries(gates) as [text, gate]}
-                    <option class="firstLetterMarked" value={gate}>{text}</option>
+                    <option class="firstLetterMarked" value={gate}>{gate ? gate.name : text}</option>
                 {/each}
                 {#if circuit.components}
                     {#each circuit.components as comp}

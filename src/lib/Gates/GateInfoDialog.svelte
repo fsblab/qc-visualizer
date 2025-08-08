@@ -6,14 +6,14 @@
 
     var {
         dialog = $bindable(),
+        numberOfQubits,
         gateData,
         deleteGateButtonPressed,
         closeDialog,
-    }: {dialog: HTMLDialogElement, gateData: gateMetadata, deleteGateButtonPressed: any, closeDialog: any} = $props();
+    }: {dialog: HTMLDialogElement, numberOfQubits: number, gateData: gateMetadata, deleteGateButtonPressed: any, closeDialog: any} = $props();
 
     const psi = "\u03C8";
     const delta = '\u03B4';
-    const minIndex: number = Math.min(...gateData.qubit!);
     var param: number | undefined = $derived(gateData.matrix.parameter);
 </script>
 
@@ -24,36 +24,38 @@
         <button class="closebutton" onclick={() => {dialog.close; closeDialog()}}> x </button>
     </div>
     <div class="metaData">
-        <span class="keyshortcut"><span class="text"> Key Shortcut: </span> {gateData.shortKey}</span>
+        <span class="keyshortcut"><span class="text"> Shortcut Key: </span> {gateData.shortKey}</span>
         <span class="matrix"><span class="text"> Matrix: </span> <Matrix scalar={gateData.matrix.scalarString} matrix={gateData.matrix.matrix}></Matrix>
             {#if param !== undefined}
-            <div class="matrix">
-                <span class="parameter">
-                    , {delta}=
-                    <input
-                        class="inputparameter"
-                        type="text"
-                        value={param}
-                        onchange={(event: Event) => {gateData.matrix.parameter = event.target?.value; gateData.matrix.parameter = isNaN(Number(gateData.matrix.parameter)) ? 0 : gateData.matrix.parameter}}
-                    />
-                </span>
-            </div>
+                <div class="matrix">
+                    <span class="parameter">
+                        , {delta}=
+                        <input
+                            class="inputparameter"
+                            type="text"
+                            value={param}
+                            onchange={(event: Event) => {gateData.matrix.parameter = event.target?.value; gateData.matrix.parameter = isNaN(Number(gateData.matrix.parameter)) ? 0 : gateData.matrix.parameter}}
+                        />
+                    </span>
+                </div>
             {/if}
         </span>
     </div>
     <div class="divider"></div>
     <div class="qubitData">
         {#if gateData.calculationResults}
-            {#each gateData.qubit! as index}
-                <span class="keyshortcut">
-                    <span class="text">
-                        <div> {psi}
-                            <sub>{index}</sub> = 
-                        </div>
-                    </span>
-                    <State z={[gateData.calculationResults[index - minIndex].up, gateData.calculationResults[index - minIndex].down]}></State>
+            <span class="vector">
+                <span class="psi">
+                    {psi} = 
                 </span>
-            {/each}
+                <div class="matrixTable">
+                    <div class="state">
+                        {#each gateData.calculationResults as z, index}
+                            <State index={index} z={z.value} numberOfQubits={numberOfQubits}></State>
+                        {/each}
+                    </div>
+                </div>
+            </span>
         {:else}
             <span class="nodata"> No Data. </span>
         {/if}
@@ -62,7 +64,7 @@
 
 <style>
     dialog {
-        height: 32%;
+        height: 40%;
         width: 32%;
         display: flex;
         flex-direction: column;
@@ -108,6 +110,28 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-right: .8em 
+        margin-right: .8em;
+    }
+
+    .vector {
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        margin-top: .64em;
+    }
+
+    .psi {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: .24em;
+        margin-right: .24em;
+    }
+
+    .state {
+        margin-right: 1em;
+        margin-left: 1em;
+        margin-top: .24em;
+        margin-bottom: .24em;
     }
 </style>

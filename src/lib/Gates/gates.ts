@@ -97,4 +97,17 @@ export const gates: {[key: string]: gateMetadata | null} = {
             matrix: [[1, 0], [0, math.complex("i")]],
         },
     },
+    "Q": {
+        gate: async () => (await import("./SwapGate.svelte")).default,
+        name: "Swap",
+        symbol: "",
+        shortKey: "Q",
+        size: 2,
+        isControlGate: true,
+        matrix: {
+            scalarString: "",
+            scalar: (delta: Complex) => 1,
+            matrix: [[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]],
+        },
+    },
 };

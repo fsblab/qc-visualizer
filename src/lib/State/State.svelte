@@ -1,63 +1,42 @@
 <script lang="ts">
-    import type { Complex } from "mathjs";
+    import { type Complex } from "mathjs";
     import { math } from "../util/math";
     import { onMount } from "svelte";
 
     onMount(() => {
-        up = z[0];
-        down = z[1];
-
         simplify();
     });
 
     function simplify() {
-        const hadamartScalar: number = 0.7071067811865475;
         const floatingPointPrecision = 1000;
 
-        up.re = math.floor(up.re * floatingPointPrecision) / floatingPointPrecision;
-        up.im = math.floor(up.im * floatingPointPrecision) / floatingPointPrecision;
-        down.re = math.floor(down.re * floatingPointPrecision) / floatingPointPrecision;
-        down.im = math.floor(down.im * floatingPointPrecision) / floatingPointPrecision;
+        z.re = math.floor(z.re * floatingPointPrecision) / floatingPointPrecision;
+        z.im = math.floor(z.im * floatingPointPrecision) / floatingPointPrecision;
 
-        if (1 - up.re < 0.0001) {
-            up.re = 1
+        if (1 - z.re < 0.0001) {
+            z.re = 1
         }
-        if (1 - down.re < 0.0001) {
-            down.re = 1
-        }
-        if (1 - up.im < 0.0001) {
-            up.re = 1
-        }
-        if (1 - down.im < 0.0001) {
-            down.im = 1
+        if (1 - z.im < 0.0001) {
+            z.im = 1
         }
 
-        const re = RegExp(/0\.707/g);
+        const reg = RegExp(/0\.707/g);
 
-        upString = up.format().replaceAll(re, "1 / \u221A2");
-        downString = down.format().replaceAll(re, "1 / \u221A2");
+        zString = z.toString().replaceAll(reg, "1 / \u221A2");
     }
 
     var {
+        index,
         z,
-    }: {z: Complex[]} = $props();
+        numberOfQubits
+    }: {index: number, z: Complex, numberOfQubits: number} = $props();
 
-    var up: Complex = $state()!;
-    var down: Complex = $state()!;
-
-    var upString: string = $state()!;
-    var downString: string = $state()!;
-
-    const circleCenter = 50;
+    var zString: string = $state()!;
 </script>
 
 <div class="qubitstate">
     <div class="amplitudes">
-        {#if z[1].re >= 0}
-            <div> <span class="up"> {upString} </span> |0&rang; + <span class="down"> {downString} </span> |1&rang; </div>
-        {:else}
-            <div> <span class="up"> {upString} </span> |0&rang; <span class="down"> {downString} </span> |1&rang; </div>
-        {/if}
+            <div class="grid"> <span class="up"> {zString} </span> |{index.toString(2).padStart(numberOfQubits, '0')}&rang; </div>
     </div>
 </div>
 
@@ -71,5 +50,10 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 4em 4em;
     }
 </style>

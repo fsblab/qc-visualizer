@@ -58,9 +58,6 @@
         flex-direction: column;
         justify-content: center;
     }
-    .matrixTable {
-        border-radius: 16%;
-    }
     .value {
         padding-left: .4em;
         padding-right: .4em;

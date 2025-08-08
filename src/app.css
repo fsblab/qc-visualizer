@@ -116,6 +116,7 @@ body.dark {
 	.matrixTable {
         border-left: 1px solid #f9f9f9;
         border-right: 1px solid #f9f9f9;
+		border-radius: 16%;
     }
 	.spacer {
 		border: 1px solid #f9f9f9;
