@@ -203,6 +203,7 @@
                         position={gate.position}
                         scale={scale}
                         offset={yOffset}
+                        fontsize={fontsize}
                     ></Gate>
                 {:else}
                     <Gate

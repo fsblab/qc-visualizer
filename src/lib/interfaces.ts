@@ -65,6 +65,7 @@ export interface gateMetadata {
         scalarString: string,
         scalar: Function,
         matrix: Array<Array<any>>
+        cmatrix?: Array<Array<any>>
     },
     calculationResults?: Complex[],
 }

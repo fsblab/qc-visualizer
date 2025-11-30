@@ -1,8 +1,7 @@
 <script lang="ts">
     import { circuitsState } from "../stores/circuits.svelte";
     import { gates } from "../Gates/gates";
-    import { math, range } from "../util/math";
-    import { Matrix, type Complex } from "mathjs";
+    import { calculateComponent } from "../util/calc";
 
 
     function validateNumber(val: any) {
@@ -37,55 +36,6 @@
             return property + 1;
         } else {
             return property - 1;
-        }
-    };
-
-    function calculateComponent() {
-        const sizeOfStateVector: number = math.pow(2, componentProps.numberOfQubits) as number;
-        const stateVector: Matrix<Complex> = math.zeros(sizeOfStateVector) as Matrix<Complex>;
-
-        //init statevector i.e. [1+0i |00>, 0+0i |01>, 0+0i |10>, 0+0i |11>]
-        for (const index of range(1, sizeOfStateVector - 1)) {
-            stateVector.set([index], math.complex(0, 0));
-        }
-
-        stateVector.set([0], math.complex(1, 0));
-        
-        const sortedKeys = Object.keys(component.gates).sort();
-        
-        const sortedGates: Array<any> = sortedKeys.reduce((acc: any, key: any) => {
-            acc[key] = component.gates[key];
-        	return acc;
-        }, {});
-        
-        for (const key in sortedGates) {
-            const gateData = component.gates[key].gateData;
-            const qubits: number[] = gateData.qubit!;
-            const cqubit: number | undefined = gateData.controlQubit;
-            const scalar = gateData.matrix.scalar(gateData.matrix.parameter);
-            const matrix = gateData.matrix.matrix;
-            const totalQubits = qubits.length + (cqubit ? 1 : 0)
-
-            // https://quantumcomputing.stackexchange.com/questions/14066/how-do-i-apply-the-hadamard-gate-to-one-qubit-in-a-two-qubit-pure-state
-            const id2 = math.identity(2) as Matrix;
-            var gateMatrix = qubits.includes(0) || 0 == cqubit ? matrix : math.identity(2) as Matrix;
-
-            for (var index = 1; index < componentProps.numberOfQubits;) {
-                if (qubits.includes(index) || index == cqubit) {
-                    gateMatrix = math.kron(gateMatrix, matrix);
-                    index += totalQubits;
-                } else {
-                    gateMatrix = math.kron(gateMatrix, id2);
-                    index += 1;
-                }
-            }
-
-            const calculationResults: Matrix<Complex> = math.multiply(gateMatrix, scalar, stateVector);
-            component.gates[key].gateData.calculationResults = calculationResults as any;
-
-            for (const index of range(0, sizeOfStateVector - 1)) {
-                stateVector.set([index], calculationResults.get([index]));
-            }
         }
     };
 
@@ -206,10 +156,10 @@
     </div>
     <div class="childOptions">
         <label for="calc">
-            Calculate Probabilities:
+            Calculate Amplitudes:
         </label>
         <div class="childOptionsOptions">
-            <button id="calc" onclick={() => calculateComponent()}>Calculate</button>
+            <button id="calc" onclick={() => calculateComponent(component, componentProps)}>Calculate</button>
         </div>
     </div>
 </div>
