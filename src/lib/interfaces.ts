@@ -23,6 +23,7 @@ export interface circuit {
     selectedGate: gateMetadata | null,
     componentProperties: componentProperties | null,
     gates: {[key: number]: gate},
+    compositeGate?: gateMetadata,
 }
 
 export interface gateProperties {

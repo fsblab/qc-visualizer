@@ -1,19 +1,32 @@
 import { math, range } from "./math";
 import { Matrix, type Complex } from "mathjs";
-import type { circuit, componentProperties } from "../interfaces";
+import type { circuit, componentProperties, gate, gateMetadata } from "../interfaces";
 import { gates } from "../Gates/gates";
 
+
+function formatComponentName(text: string, size: number): string {
+    if (size == 1) {
+        return text.slice(0, 1);
+    } else if (text.length > size) {
+        const start = text.slice(0, (size - 1) * 2);
+        const end = text.slice(-1);
+        return `${start}${end}`;
+    }
+
+    return text;
+}
 
 const zeroStateProjector = [[1, 0], [0, 0]];   // |0><0|
 const oneStateProjector = [[0, 0], [0, 1]];    // |1><1|
 const id2 = math.identity(2) as Matrix;
-const CNOTGate = gates["A"]!.matrix.cmatrix as any as Matrix;
+const CNOTGate = gates["A"]!.matrix.cmatrix as any as Matrix;   // for use in swapGate()
 
-export function calculateComponent(component: circuit, componentProps: componentProperties) {
+export function calculateComponent(component: circuit, componentProps: componentProperties): gateMetadata {
     const sizeOfStateVector: number = math.pow(2, componentProps.numberOfQubits) as number;
     const stateVector: Matrix<Complex> = math.zeros(sizeOfStateVector) as Matrix<Complex>;
+    var compositeMatrix = math.identity(sizeOfStateVector) as Matrix<Complex>;
 
-    // init statevector i.e. [1+0i |00>, 0+0i |01>, 0+0i |10>, 0+0i |11>]
+    // init statevector e.g. [1+0i |00>, 0+0i |01>, 0+0i |10>, 0+0i |11>]
     for (const index of range(1, sizeOfStateVector - 1)) {
         stateVector.set([index], math.complex(0, 0));
     }
@@ -46,6 +59,7 @@ export function calculateComponent(component: circuit, componentProps: component
             gateMatrix = simpleGate(totalTargetQubits, qubits, componentProps.numberOfQubits, matrix);
         }
 
+        compositeMatrix = math.multiply(gateMatrix, scalar, compositeMatrix);
         const calculationResults: Matrix<Complex> = math.multiply(gateMatrix, scalar, stateVectorCopy);
         component.gates[key].gateData.calculationResults = calculationResults as any;
 
@@ -53,6 +67,22 @@ export function calculateComponent(component: circuit, componentProps: component
             stateVector.set([index], calculationResults.get([index]));
         }
     }
+
+    const compositeGate = {
+        gate: async () => (await import("../Gates/BaseGate.svelte")).default,
+        name: component.label,
+        symbol: formatComponentName(component.label, componentProps.numberOfQubits),
+        shortKey: "None",
+        size: componentProps.numberOfQubits,
+        isControlGate: false,
+        matrix: {
+            scalarString: "",
+            scalar: (delta: Complex) => 1,
+            matrix: compositeMatrix.toArray() as Array<Array<any>>,
+        }
+    } as gateMetadata;
+
+    return compositeGate;
 }
 
 

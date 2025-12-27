@@ -3,18 +3,18 @@
     import { designStore } from "../stores/design";
     
 
-    function mouseUp(event: MouseEvent) {
+    async function mouseUp(event: MouseEvent) {
         mousePosOnUp = [event.offsetX, event.offsetY];
-
+        
         if (component!.selectedGate?.size! > component!.componentProperties?.numberOfQubits!) {
-            return
+            return;
         }
 
-        if (mousePosOnUp[0] != mousePosOnDown[0] || mousePosOnUp[1] != mousePosOnDown[1]) {
+        if (Math.abs(mousePosOnUp[0] - mousePosOnDown[0]) > 2 || Math.abs(mousePosOnUp[1] - mousePosOnDown[1]) > 2) {
             moveSvg();
         } else {
             mousePosOnUp = [event.offsetX - currentTranslation[0], event.offsetY - currentTranslation[1]];
-            setGate();
+            await setGate();
         }
     };
 
@@ -38,12 +38,12 @@
             
             if (Math.abs(mousePosOnUp[1] - correctedPos[1]) > Math.abs(ypos - mousePosOnUp[1])) {
                 correctedPos[1] = ypos;
-                indexVal = index
-            };
+                indexVal = index;
+            }
         });
 
         row = indexVal;
-        indexVal = 0
+        indexVal = 0;
         correctedPos[1] -= (fontsize + yOffset) / 2;
 
         Array.from({length: 100}, (_: any, i: number) => i).forEach((index: number) => {
@@ -60,7 +60,7 @@
         var gateData;
 
         if (component!.selectedGate.isControlGate && columnWhichAControlQubitIsCurrentlyBeingPlacedOn === null) {
-            component!.selectedGate.controlQubit = row
+            component!.selectedGate.controlQubit = row;
             gateData = {...component!.selectedGate, gate: await component!.selectedGate.gate(), qubit: [row], controlQubit: row};
             component!.gates[column] = {gateData, position: correctedPos};
             columnWhichAControlQubitIsCurrentlyBeingPlacedOn = column;
@@ -83,6 +83,7 @@
             }
 
             const rows: number[] = determineRows(row);
+            correctedPos[1] = getYPos(rows[0]) - (fontsize + yOffset) / 2;
 
             if (rows.length != 0) {
                 gateData = {...component!.selectedGate, gate: await component!.selectedGate.gate(), qubit: rows};
@@ -101,17 +102,17 @@
             }
             
             numberOfQubits = component!.selectedGate!.controlQubit! - row > 0 ? component!.selectedGate!.controlQubit! : numberOfQubits;
-            size = component?.selectedGate!.size! - 1
+            size = component?.selectedGate!.size! - 1;
         }
 
         var rows: number[] = [];
         var counter: number = size;
 
-        while (numberOfQubits! - row < size - 1) {
+        while (numberOfQubits! - row < size) {
             row--;
         }
 
-        if (numberOfQubits! - row < size - 1) {
+        if (numberOfQubits! - row < size) {
             return [];
         }
 
@@ -180,7 +181,7 @@
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<svg class="svg" onmousedown={(event: MouseEvent) => {mousePosOnDown = [event.offsetX, event.offsetY]}} onmouseup={(event) => {mouseUp(event)}}>
+<svg class="svg" onmousedown={(event: MouseEvent) => {mousePosOnDown = [event.offsetX, event.offsetY]}} onmouseup={async (event) => {await mouseUp(event)}}>
     <g style="fill: {getColor()}" transform="translate({currentTranslation[0]}, {currentTranslation[1]})">
         {#each Array.from({length: 100}, (_: any, i: number) => i) as index}
             <line x1={getYPos(index) + yOffset * 2} y1={0} x2={getYPos(index) + yOffset * 2} y2="100%" stroke={"#424242"} stroke-width={2} />

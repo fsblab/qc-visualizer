@@ -29,7 +29,7 @@
         });
 
         return canLower;
-    }
+    };
 
     function mouseWheelUsed(direction: number, property: number) {
         if (direction > 0) {
@@ -41,9 +41,9 @@
 
     var { activeTab = $bindable() } = $props();
 
-    var circuit = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)];
-    var component = circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)];
-    var componentProps = circuitsState.getComponentProperties(activeTab);
+    var circuit = $derived(circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)]);
+    var component = $derived(circuitsState.circuits[circuitsState.getCircuitIndex(activeTab)].components![circuitsState.getActiveComponentIndex(activeTab)]);
+    var componentProps = $derived(circuitsState.getComponentProperties(activeTab));
 </script>
 
 <div class="options">
@@ -146,8 +146,8 @@
                 {/each}
                 {#if circuit.components}
                     {#each circuit.components as comp}
-                        {#if comp != component}
-                            <option class="firstLetterMarked" value={comp.value}>{comp.label}</option>
+                        {#if (comp.label != component.label) && comp.compositeGate}
+                            <option class="firstLetterMarked" value={comp.compositeGate}>{comp.label}</option>
                         {/if}
                     {/each}
                 {/if}
@@ -159,7 +159,7 @@
             Calculate Amplitudes:
         </label>
         <div class="childOptionsOptions">
-            <button id="calc" onclick={() => calculateComponent(component, componentProps)}>Calculate</button>
+            <button id="calc" onclick={() => {component.compositeGate = calculateComponent(component, componentProps)}}>Calculate</button>
         </div>
     </div>
 </div>
