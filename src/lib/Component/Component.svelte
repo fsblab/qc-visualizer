@@ -3,18 +3,14 @@
     import { designStore } from "../stores/design";
     
 
-    function mouseUp(event: MouseEvent) {
+    async function mouseUp(event: MouseEvent) {
         mousePosOnUp = [event.offsetX, event.offsetY];
-
-        if (component!.selectedGate?.size! > component!.componentProperties?.numberOfQubits!) {
-            return
-        }
 
         if (mousePosOnUp[0] != mousePosOnDown[0] || mousePosOnUp[1] != mousePosOnDown[1]) {
             moveSvg();
         } else {
             mousePosOnUp = [event.offsetX - currentTranslation[0], event.offsetY - currentTranslation[1]];
-            setGate();
+            await setGate();
         }
     };
 
@@ -38,7 +34,7 @@
             
             if (Math.abs(mousePosOnUp[1] - correctedPos[1]) > Math.abs(ypos - mousePosOnUp[1])) {
                 correctedPos[1] = ypos;
-                indexVal = index
+                indexVal = index;
             };
         });
 
@@ -59,41 +55,9 @@
         column = indexVal;
         var gateData;
 
-        if (component!.selectedGate.isControlGate && component!.selectedGate.controlQubit === undefined) {
-            gateData = {...component!.selectedGate, controlQubit: row};
-            component!.gates[column] = {gateData, position: correctedPos};
-            columnWhichAControlQubitIsCurrentlyBeingPlacedOn = column;
-        } else if (component!.selectedGate.isControlGate && component!.selectedGate.controlQubit !== undefined) {
-            const rows: number[] = determineRows(row);
-            component!.gates[columnWhichAControlQubitIsCurrentlyBeingPlacedOn!].gateData.qubit = rows;
-            columnWhichAControlQubitIsCurrentlyBeingPlacedOn = null;
-        } else {
-            const rows: number[] = determineRows(row);
-            gateData = {...component!.selectedGate, gate: await component!.selectedGate.gate(), qubit: rows};
-            component!.gates[column] = {gateData, position: correctedPos};
-        }
+        gateData = {...component!.selectedGate, gate: await component!.selectedGate.gate(), qubit: [row]};
+        component!.gates[column] = {gateData, position: correctedPos};
     };
-
-    function determineRows(row: number): number[] {
-        if (component!.selectedGate!.isControlGate) {
-
-        }
-
-        var rows: number[] = [];
-        var counter: number = component?.selectedGate!.size!
-
-        while (component?.componentProperties?.numberOfQubits! - row < component?.selectedGate!.size! - 1) {
-            row--;
-        }
-
-        while (counter) {
-            rows.push(row);
-            row++;
-            counter--;
-        }
-
-        return rows;
-    }
 
     async function openDialog(column: number) {
         GateInfoDialog = (await import("../Gates/GateInfoDialog.svelte")).default;
@@ -106,7 +70,7 @@
     }
 
     function deleteGateButtonPressed(column: number) {
-        delete component!.gates[column]
+        delete component!.gates[column];
         gateColumn = null;
     };
 
@@ -145,13 +109,12 @@
 
     var dialog = $state<HTMLDialogElement>()!;
     var gateColumn = $state<number | null>(null);
-    var columnWhichAControlQubitIsCurrentlyBeingPlacedOn: number | null = null;
 
-    var GateInfoDialog = $state<any>(null);;
+    var GateInfoDialog = $state<any>(null);
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<svg class="svg" onmousedown={(event: MouseEvent) => {mousePosOnDown = [event.offsetX, event.offsetY]}} onmouseup={(event) => {mouseUp(event)}}>
+<svg class="svg" onmousedown={(event: MouseEvent) => {mousePosOnDown = [event.offsetX, event.offsetY]}} onmouseup={async (event) => {await mouseUp(event)}}>
     <g style="fill: {getColor()}" transform="translate({currentTranslation[0]}, {currentTranslation[1]})">
         {#each Array.from({length: 100}, (_: any, i: number) => i) as index}
             <line x1={getYPos(index) + yOffset * 2} y1={0} x2={getYPos(index) + yOffset * 2} y2="100%" stroke={"#424242"} stroke-width={2} />
@@ -168,7 +131,13 @@
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_missing_attribute -->
             <a onclick={() => {openDialog(Number(column))}}>
-                <Gate position={gate.position} scale={scale} fontsize={fontsize} size={gate.gateData.size} symbol={gate.gateData.symbol} param={gate.gateData.matrix.parameter}></Gate>
+                <Gate
+                    position={gate.position}
+                    scale={scale}
+                    fontsize={fontsize}
+                    symbol={gate.gateData.symbol}
+                    param={gate.gateData.matrix.parameter}
+                ></Gate>
             </a>
         {/each}
     </g>

@@ -8,7 +8,6 @@
         <tr>
             <td>Name</td>
             <td>Symbol</td>
-            <td>Size</td>
             <td>Matrix</td>
             <td>Gate</td>
         </tr>
@@ -20,7 +19,6 @@
                 <tr>
                     <td> {#if sqrt} <span> &radic; </span> <span class="sqrt"><span class="sizingcorrection"> &nbsp;{gate.name.replace("&radic; ", "")}&nbsp; </span></span> {:else} {gate.name} {/if} </td>
                     <td> {gate.symbol} </td>
-                    <td> {gate.size} </td>
                     <td class="matrixrow"><div class="matrixcolumn"><Matrix matrix={gate.matrix.matrix} scalar={gate.matrix.scalarString}></Matrix></div><td>
                     {#if gate.gate}
                         {@const Gate = gate.gate}

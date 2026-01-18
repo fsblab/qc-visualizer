@@ -3,6 +3,9 @@
     import type { gateMetadata } from "../interfaces";
     import Matrix from "../Matrix/Matrix.svelte";
     import State from "../State/State.svelte";
+    import BlochSphere from "./BlochSphere.svelte";
+    import { math } from "../util/math";
+    import type { Complex } from "mathjs";
 
     var {
         dialog = $bindable(),
@@ -15,6 +18,10 @@
     const delta = '\u03B4';
     const minIndex: number = Math.min(...gateData.qubit!);
     var param: number | undefined = $derived(gateData.matrix.parameter);
+    const u = $derived(math.divide(math.multiply(gateData.calculationResults!.up, gateData.calculationResults!.down), math.square(gateData.calculationResults!.up))) as Complex;
+    const Px = $derived(math.divide(math.multiply(2, u.re), math.add(1, math.square(u.re), math.square(u.im))));
+    const Py = $derived(math.divide(math.multiply(2, u.im), math.add(1, math.square(u.re), math.square(u.im))));
+    const Pz = $derived(math.divide(math.subtract(math.subtract(1, math.square(u.re)), math.square(u.im)), math.add(1, math.square(u.re), math.square(u.im))));
 </script>
 
 <dialog bind:this={dialog} onclose={() => {dialog.close; closeDialog()}}>
@@ -51,7 +58,8 @@
                             <sub>{index}</sub> = 
                         </div>
                     </span>
-                    <State z={[gateData.calculationResults[index - minIndex].up, gateData.calculationResults[index - minIndex].down]}></State>
+                    <State z={[gateData.calculationResults.up, gateData.calculationResults.down]}></State>
+                    <BlochSphere x={Px} y={Py} z={Pz}></BlochSphere>
                 </span>
             {/each}
         {:else}

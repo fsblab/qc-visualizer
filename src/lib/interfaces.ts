@@ -30,7 +30,6 @@ export interface gateProperties {
     position: number[],
     scale: number,
     fontsize: number,
-    size: number,
     symbol: string,
     param?: number,
 }
@@ -56,9 +55,6 @@ export interface gateMetadata {
     name: string,
     symbol: string,
     shortKey: string,
-    size: number,
-    isControlGate: boolean,
-    controlQubit?: number,
     qubit?: number[],
     matrix: {
         parameter?: number,
@@ -66,7 +62,7 @@ export interface gateMetadata {
         scalar: Function,
         matrix: Array<Array<any>>
     },
-    calculationResults?: calculationResults[],
+    calculationResults?: calculationResults,
 }
 
 export interface calculationResults {

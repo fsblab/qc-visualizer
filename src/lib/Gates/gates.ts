@@ -10,8 +10,6 @@ export const gates: {[key: string]: gateMetadata | null} = {
         name: "Identity",
         symbol: "I",
         shortKey: "I",
-        size: 1,
-        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
@@ -23,8 +21,6 @@ export const gates: {[key: string]: gateMetadata | null} = {
         name: "Hadamard",
         symbol: "H",
         shortKey: "H",
-        size: 1,
-        isControlGate: false,
         matrix: {
             scalarString: "1/sqrt(2)",
             scalar: (delta: Complex) => 1 / (math.sqrt(2) as number),
@@ -36,8 +32,6 @@ export const gates: {[key: string]: gateMetadata | null} = {
         name: "Global Phase",
         symbol: "Ph",
         shortKey: "P",
-        size: 1,
-        isControlGate: false,
         matrix: {
             parameter: 0,
             scalarString: "e^{i\u03B4}",
@@ -50,8 +44,6 @@ export const gates: {[key: string]: gateMetadata | null} = {
         name: "Pauli X (NOT)",
         symbol: "X",
         shortKey: "X",
-        size: 1,
-        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
@@ -63,8 +55,6 @@ export const gates: {[key: string]: gateMetadata | null} = {
         name: "Pauli Y",
         symbol: "Y",
         shortKey: "Y",
-        size: 1,
-        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
@@ -76,8 +66,6 @@ export const gates: {[key: string]: gateMetadata | null} = {
         name: "Pauli Z",
         symbol: "Z",
         shortKey: "Z",
-        size: 1,
-        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,
@@ -89,8 +77,6 @@ export const gates: {[key: string]: gateMetadata | null} = {
         name: "&radic; Z",
         symbol: "S",
         shortKey: "S",
-        size: 1,
-        isControlGate: false,
         matrix: {
             scalarString: "",
             scalar: (delta: Complex) => 1,

@@ -51,7 +51,7 @@
 
         const sortedKeys = Object.keys(component.gates).sort();
 
-        const sortedGates = sortedKeys.reduce((acc, key: any) => {
+        const sortedGates = sortedKeys.reduce((acc: any, key: any) => {
         	acc[key] = component.gates[key];
         	return acc;
         }, {});
@@ -63,32 +63,21 @@
             const scalar = component.gates[key].gateData.matrix.scalar(component.gates[key].gateData.matrix.parameter);
             const matrix = component.gates[key].gateData.matrix.matrix;
             var qubitVector: Complex[] = [];
-            
-            if (component.gates[key].gateData.controlQubit) {
-                qubitVector.push(register[component.gates[key].gateData.controlQubit!].get([0]));
-                qubitVector.push(register[component.gates[key].gateData.controlQubit!].get([1]));
-            }
-            
+                        
             for (var qubit of qubits) {
                 qubitVector.push(register[qubit].get([0]));
                 qubitVector.push(register[qubit].get([1]));
             }
             
             const calculationResults: Matrix<Complex> = math.multiply(qubitVector, scalar, matrix);
-            component.gates[key].gateData.calculationResults = [];
             var counter = 0;
                 
             while (counter < calculationResults.length) {
-                component.gates[key].gateData.calculationResults?.push({up: calculationResults[counter], down: calculationResults[counter + 1]});
+                component.gates[key].gateData.calculationResults = {up: calculationResults[counter], down: calculationResults[counter + 1]};
                 counter += 2;
             }
 
             counter = 0;
-
-            if (component.gates[key].gateData.controlQubit) {
-                register[component.gates[key].gateData.controlQubit!] = math.matrix([calculationResults[0], calculationResults[1]]);
-                counter = 2;
-            }
 
             for (var qubit of qubits) {
                 register[Number(qubit)] = math.matrix([calculationResults[counter], calculationResults[counter + 1]]);
@@ -200,12 +189,12 @@
         <div class="childOptionsOptions">
             <select bind:value={component.selectedGate} id="gateSelect">
                 {#each Object.entries(gates) as [text, gate]}
-                    <option class="firstLetterMarked" value={gate}>{text}</option>
+                    <option value={gate}>{text}</option>
                 {/each}
                 {#if circuit.components}
                     {#each circuit.components as comp}
                         {#if comp != component}
-                            <option class="firstLetterMarked" value={comp.value}>{comp.label}</option>
+                            <option value={comp.value}>{comp.label}</option>
                         {/if}
                     {/each}
                 {/if}
@@ -267,8 +256,5 @@
     .numberOfQubits {
         text-align: center;
         width: 1em;
-    }
-    .firstLetterMarked {
-        text-decoration: line-through;
     }
 </style>

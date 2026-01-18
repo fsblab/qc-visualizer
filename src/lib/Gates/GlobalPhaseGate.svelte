@@ -5,6 +5,6 @@
     var props: gateProperties = $props();
 </script>
 
-<BaseGate position={props.position} scale={props.scale} fontsize={props.fontsize} size={props.size} symbol={props.symbol}>
+<BaseGate position={props.position} scale={props.scale} fontsize={props.fontsize} symbol={props.symbol}>
     ({props.param})
 </BaseGate>
